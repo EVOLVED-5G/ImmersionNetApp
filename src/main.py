@@ -1,7 +1,7 @@
 
 from connection.ServerThread import ServerThread
 from msg.MsgDispatcher import MsgDispatcher
-from qos.QoSManager import QoSManager
+from qos.RequestManager import RequestManager
 
 
 def print_readme():
@@ -15,10 +15,9 @@ if __name__ == '__main__':
     # Initialize all components in the correct order
     msgDispatcher = MsgDispatcher()
     serverThread = ServerThread(msgDispatcher)
-    qoS_manager = QoSManager(serverThread)
-    msgDispatcher.set_qos_handler(qoS_manager)
+    vApp_request_manager = RequestManager(serverThread)
+    msgDispatcher.set_vApp_handler(vApp_request_manager)
 
     # Start the threads
     msgDispatcher.start()
     serverThread.start()
-

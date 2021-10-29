@@ -1,4 +1,18 @@
-from enum import Enum
+
+from msg.MsgUtils import AnswerForVApp
+
+
+class QoSAnswer(AnswerForVApp):
+
+    def __init__(self, type_msg, num, status, proposed_qos):
+        super().__init__(type_msg, num, status)
+        self.content = JsonAnswerContent(proposed_qos)
+
+
+class JsonAnswerContent(object):
+
+    def __init__(self, proposed_qos):
+        self.proposedQos = proposed_qos
 
 
 class QoSRequest(object):
@@ -14,22 +28,4 @@ class QoSParams(object):
         self.max_latency = l_max
         self.desired_latency = l_desired
         self.bandwidth = bandwidth
-
-
-class QoSAnswer(object):
-
-    def __init__(self, type_msg, num, status, proposed_qos):
-        self.type = type_msg
-        self.content = JsonAnswerContent(num, status, proposed_qos)
-
-
-class JsonAnswerContent(object):
-    ERROR = -1
-    OK = 0
-    MODIF = 1
-
-    def __init__(self, num, status, proposed_qos):
-        self.numAnswer = num
-        self.status = status
-        self.proposedQos = proposed_qos
 
