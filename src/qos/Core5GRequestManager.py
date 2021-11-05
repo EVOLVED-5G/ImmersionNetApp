@@ -1,3 +1,5 @@
+import requests
+
 
 class Core5GRequestManager:
 
@@ -6,6 +8,11 @@ class Core5GRequestManager:
 
     def request_qos(self, qos_params):
         # Create AsSessionWithQoS API call from the given QoS parameters
-        print("Not implemented yet")
+        print("5G Core API call not implemented yet")
+
+    def test_emulator_call(self):
+        query = {'username': 'admin@my-email.com', 'password': 'pass'}
+        response = requests.get('http://localhost:8888/api/v1/login/access-token', params=query)
+        print(response)
 
 

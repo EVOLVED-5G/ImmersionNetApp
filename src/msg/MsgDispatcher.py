@@ -43,6 +43,6 @@ class MsgDispatcher(PoliteThread):
     def add_msg(self, msg):
         self.queue_in.put(msg)
 
-    def set_vApp_handler(self, qh):
+    def set_request_handler(self, qh):
         self.qos_handler = qh
 

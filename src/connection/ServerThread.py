@@ -8,6 +8,7 @@ from connection.PoliteThread import PoliteThread
 class ServerThread(PoliteThread):
 
     mustRun = True
+    # Run the NetApp locally. The HMD will be on the same local network and will be able to access to this machine.
     IPV4_ADDR = "127.0.0.1"
     PORT = 9877
 
@@ -31,6 +32,7 @@ class ServerThread(PoliteThread):
             print("Client_" + str(self.numClient) + " accepted and handheld in a dedicated thread")
             self.numClient += 1
 
+        # At the end, properly close my client handler
         if self.client_handle is not None:
             self.client_handle.polite_stop()
 

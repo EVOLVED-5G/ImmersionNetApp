@@ -1,6 +1,7 @@
 from msg.MsgUtils import AnswerForVApp
 
 
+# Classes to be translated into Json messages about monitoring
 class MonitoringRequest(object):
 
     def __init__(self, params):
