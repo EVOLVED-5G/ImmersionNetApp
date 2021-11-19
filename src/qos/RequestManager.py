@@ -40,6 +40,8 @@ class RequestManager:
             self.server.add_msg_to_send(jsonpickle.encode(answer, unpicklable=False))
 
     def test_nef_emulator_calls(self):
-        self.core5GManager.test_emulator_call()
+        self.core5GManager.ask_access_token()
+        # self.core5GManager.ask_cells()
+        self.core5GManager.create_monitoring_subscription()
 
 
