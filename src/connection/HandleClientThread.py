@@ -54,3 +54,51 @@ class HandleClientThread(PoliteThread):
         super().polite_stop()
         self.sender.polite_stop()
         self.clientSocket.close()
+
+
+class ReadOnlyClientThread(PoliteThread):
+
+    must_run = True
+    MSG_QUEUE_LIMIT = 256
+
+    def __init__(self, client_socket):
+        super().__init__()
+        self.clientSocket = client_socket
+        # Create two synchronized queues: one for incoming msg and the other one for msg to be sent
+        self.queue_in = queue.Queue(self.MSG_QUEUE_LIMIT)
+        self.queue_out = queue.Queue(self.MSG_QUEUE_LIMIT)
+        self.sender = None
+
+    def run(self):
+        while self.must_run:
+            # In this loop, only wait for incoming messages
+            self.read_incoming_msg()
+        self.sender.polite_stop()
+        self.clientSocket.close()
+
+    def read_incoming_msg(self):
+        # Read the msg content size first
+        total_read = 0
+        chunks = []
+        msg = ""
+        msgEnded = False
+        # while not msgEnded:
+        #     chunk = self.clientSocket.recv(1024).decode('utf-8')
+        #     if chunk == b'':
+        #         msgEnded = True
+        #     else:
+        #         chunks.append(chunk)
+        #     msg = msg + chunk
+
+        msg = self.clientSocket.recv(512).decode('utf-8')
+        print("Received message from emulator (ReadOnlyClient): " + msg)
+        # Give the msg to the dispatcher
+        # self.msg_dispatcher.add_msg(msg)
+
+    def add_msg_to_send(self, msg):
+        self.queue_out.put(msg)
+
+    def polite_stop(self):
+        super().polite_stop()
+        self.sender.polite_stop()
+        self.clientSocket.close()

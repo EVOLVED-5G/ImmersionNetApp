@@ -1,6 +1,8 @@
 import jsonpickle
 import requests
 from emulator.Emulator_API import EmulatorAccessToken
+from qos.EndPointGenerator import EndPointGenerator
+from datetime import datetime, timedelta
 
 
 class Core5GRequestManager:
@@ -8,6 +10,7 @@ class Core5GRequestManager:
     def __init__(self, vapp_manager):
         self.vAppManager = vapp_manager
         self.accessToken = None
+        self.endpointGenerator = EndPointGenerator()
 
     def request_qos(self, qos_params):
         # Create AsSessionWithQoS API call from the given QoS parameters
@@ -38,13 +41,18 @@ class Core5GRequestManager:
         print(response.text)
 
     def create_monitoring_subscription(self):
+        # First, create the endpoint locally to be able to receive notifications from the emulator
+        #endpoint = self.endpointGenerator.add_server()
+        #endpoint = self.endpointGenerator.start_notif_server()
+        endpoint = self.endpointGenerator.start_flask()
+
         req_header = {'Authorization': "Bearer {}".format(self.accessToken.str)}
 
         req_data = {'externalId': '10002@domain.com',
-                    'notificationDestination': 'http://host.docker.internal:9999/api/v1/utils/monitoring/callback',
+                    'notificationDestination': endpoint,
                     'monitoringType': 'LOCATION_REPORTING',
-                    'maximumNumberOfReports': 1,
-                    'monitorExpireTime': '2021-11-19T16:43:48.483Z'
+                    'maximumNumberOfReports': 100000,
+                    'monitorExpireTime': (datetime.today() + timedelta(hours=3)).isoformat()
                     }
 
         response = requests.post("http://localhost:8888/api/v1/3gpp-monitoring-event/v1/myNetapp/subscriptions",
@@ -52,3 +60,18 @@ class Core5GRequestManager:
                                  # we could use json.dumps, but let's stick with jsonpickle for now
                                  headers=req_header, data=jsonpickle.encode(req_data, unpicklable=False))
         print(response.text)
+
+    def delete_all_subscriptions(self):
+        for i in range(50, 60):
+            self.delete_subscription(i)
+
+    def delete_subscription(self, sub_id):
+        req_header = {'Authorization': "Bearer {}".format(self.accessToken.str)}
+        base_url = "http://localhost:8888/api/v1/3gpp-monitoring-event/v1/myNetapp/subscriptions/"
+
+        response = requests.delete(base_url + str(sub_id), headers=req_header)
+        print(response.text)
+
+
+
+
