@@ -15,9 +15,9 @@ class RequestManager:
     TYPE_INIT_REQUEST = 0
     TYPE_START_MONITORING = 1
 
-    def __init__(self, server):
+    def __init__(self, server, app):
         self.server = server
-        self.core5GManager = Core5GRequestManager(self)
+        self.core5GManager = Core5GRequestManager(self, app)
 
     # Handle a QoS request from the vApp
     def handle_qos_request(self, msg, type_id):

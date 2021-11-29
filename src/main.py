@@ -4,6 +4,7 @@ from flask import request, Flask, jsonify
 
 from connection.ServerThread import ServerThread
 from msg.MsgDispatcher import MsgDispatcher
+from qos.EndPointGenerator import EndPointGenerator
 from qos.RequestManager import RequestManager
 
 
@@ -12,17 +13,8 @@ def print_readme():
     print(msg)
 
 
+FLASK_SERVER_PORT = 9999
 app = Flask(__name__)
-
-
-@app.route("/monitoring", methods=['POST'])
-def test():
-    notif_json = request.json
-    print('POST request received: ' + jsonpickle.dumps(notif_json))
-    # return flask.Response(status=200)
-    resp = jsonify(success=True)
-    resp.status_code = 200
-    return resp
 
 
 if __name__ == '__main__':
@@ -31,16 +23,17 @@ if __name__ == '__main__':
     # Initialize all components in the correct order
     msgDispatcher = MsgDispatcher()
     serverThread = ServerThread(msgDispatcher)
-    request_manager = RequestManager(serverThread)
+    request_manager = RequestManager(serverThread, app)
     msgDispatcher.set_request_handler(request_manager)
 
-    # Start the threads
+    # Start the threads and the flask server
     msgDispatcher.start()
     serverThread.start()
 
     request_manager.test_nef_emulator_calls()
+    # Start the flask server last
+    app.run(host="localhost", port=FLASK_SERVER_PORT, debug=False)
 
-    app.run(host="localhost", port=9999, debug=False)
 
 
 

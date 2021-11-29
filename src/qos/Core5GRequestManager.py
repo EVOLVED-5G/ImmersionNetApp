@@ -7,10 +7,10 @@ from datetime import datetime, timedelta
 
 class Core5GRequestManager:
 
-    def __init__(self, vapp_manager):
+    def __init__(self, vapp_manager, app):
         self.vAppManager = vapp_manager
         self.accessToken = None
-        self.endpointGenerator = EndPointGenerator()
+        self.endpointGenerator = EndPointGenerator(app)
 
     def request_qos(self, qos_params):
         # Create AsSessionWithQoS API call from the given QoS parameters
@@ -42,9 +42,7 @@ class Core5GRequestManager:
 
     def create_monitoring_subscription(self):
         # First, create the endpoint locally to be able to receive notifications from the emulator
-        #endpoint = self.endpointGenerator.add_server()
-        #endpoint = self.endpointGenerator.start_notif_server()
-        endpoint = self.endpointGenerator.start_flask()
+        endpoint = self.endpointGenerator.start_ue_monitoring()
 
         req_header = {'Authorization': "Bearer {}".format(self.accessToken.str)}
 
@@ -62,7 +60,7 @@ class Core5GRequestManager:
         print(response.text)
 
     def delete_all_subscriptions(self):
-        for i in range(50, 60):
+        for i in range(60):
             self.delete_subscription(i)
 
     def delete_subscription(self, sub_id):
