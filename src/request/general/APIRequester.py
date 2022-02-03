@@ -1,3 +1,4 @@
+from emulator import Emulator_Utils
 
 
 class APIRequester:
@@ -6,4 +7,5 @@ class APIRequester:
     def __init__(self, endpoint_generator,  token):
         self.endpoint_gen = endpoint_generator
         self.token = token
+        self.host = Emulator_Utils.get_host_of_the_nef_emulator()
 

@@ -44,7 +44,7 @@ class Manual5GCoreRequester:
 
     def create_monitoring_subscription(self):
         # First, create the endpoint locally to be able to receive notifications from the emulator
-        endpoint = self.endpointGenerator.start_ue_monitoring()
+        endpoint = self.endpointGenerator.create_ue_location_endpoint()
 
         req_header = {'Authorization': "Bearer {}".format(self.accessToken.str)}
 

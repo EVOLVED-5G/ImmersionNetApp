@@ -21,9 +21,11 @@ class RequestManager:
     def handle_vapp_qos_request(self, msg, type_id):
         if type_id == self.TYPE_INIT_REQUEST:
             asked_qos = msg.qos_params['initialQoSRequest']
+
             # For now, no 5G API call is triggered
             # Simply create a dummy answer and send it back to the vApp
-            self.core5GManager.request_qos(asked_qos)
+            # self.core5GManager.request_qos(asked_qos)
+
             # Dummy answer saying OK, includes either None or the asked QoS
             answer = QoSAnswer(type_id, asked_qos['numRequest'], AnswerForVApp.OK, asked_qos)
             # Translate it into json with the unpickable flag set to false to remove jsonpickle artifacts
@@ -42,6 +44,7 @@ class RequestManager:
         self.core5GManager.start_comm_with_emulator()
         # Optional calls to showcase the different APIs
         self.core5GManager.track_ue_location()
+        self.core5GManager.start_gbr_monitoring(ue_ipv4="10.0.0.1")
 
 
 

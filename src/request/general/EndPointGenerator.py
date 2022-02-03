@@ -16,11 +16,13 @@ class EndPointGenerator:
     def __init__(self, app):
         self.flask_app = app
 
-    def start_ue_monitoring(self):
-        self.flask_app.add_url_rule("/monitoring", methods=['POST'], view_func=on_post_general_notif)
-        return 'http://host.docker.internal:9999/monitoring'
+    def create_ue_location_endpoint(self):
+        self.flask_app.add_url_rule("/monitoring/location", methods=['POST'], view_func=on_post_general_notif)
+        return 'http://host.docker.internal:9999/monitoring/location'
 
-
+    def create_gbr_monitoring_endpoint(self):
+        self.flask_app.add_url_rule("/monitoring/gbr", methods=['POST'], view_func=on_post_general_notif)
+        return 'http://host.docker.internal:9999/monitoring/gbr'
 
 
 
