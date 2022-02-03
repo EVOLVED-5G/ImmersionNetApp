@@ -1,10 +1,8 @@
-import flask
-import jsonpickle
-from flask import request, Flask, jsonify
+
+from flask import Flask
 
 from connection.ServerThread import ServerThread
 from msg.MsgDispatcher import MsgDispatcher
-from qos.EndPointGenerator import EndPointGenerator
 from qos.RequestManager import RequestManager
 
 

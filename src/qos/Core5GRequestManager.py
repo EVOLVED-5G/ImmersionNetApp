@@ -1,6 +1,7 @@
 import jsonpickle
 import requests
 from emulator.Emulator_API import EmulatorAccessToken
+from qos import SDK5GRequestManager
 from qos.EndPointGenerator import EndPointGenerator
 from datetime import datetime, timedelta
 
@@ -46,14 +47,17 @@ class Core5GRequestManager:
 
         req_header = {'Authorization': "Bearer {}".format(self.accessToken.str)}
 
-        req_data = {'externalId': '10002@domain.com',
+        req_data = {'externalId': '10001@domain.com',
                     'notificationDestination': endpoint,
                     'monitoringType': 'LOCATION_REPORTING',
-                    'maximumNumberOfReports': 100000,
+                    'maximumNumberOfReports': 100,
                     'monitorExpireTime': (datetime.today() + timedelta(hours=3)).isoformat()
                     }
 
-        response = requests.post("http://localhost:8888/api/v1/3gpp-monitoring-event/v1/myNetapp/subscriptions",
+        # Be careful, this now uses /nef in the path for Localization and QoS APIs
+        # In case of "Subscription not found" msg, check this url on the online emulator to make sure it matches
+        req_post_url = "http://localhost:8888/nef/api/v1/3gpp-monitoring-event/v1/myNetapp/subscriptions"
+        response = requests.post(req_post_url,
                                  # Warning: the emulator expects a json object, so we must encapsulate the attributes
                                  # we could use json.dumps, but let's stick with jsonpickle for now
                                  headers=req_header, data=jsonpickle.encode(req_data, unpicklable=False))
@@ -70,6 +74,6 @@ class Core5GRequestManager:
         response = requests.delete(base_url + str(sub_id), headers=req_header)
         print(response.text)
 
-
-
-
+    def showcase_sdk_loc1(self):
+        #SDK5GRequestManager.showcase_login_to_the_emulator_and_test_token()
+        SDK5GRequestManager.showcase_create_subscription_and_retrieve_call_backs(self.endpointGenerator)
