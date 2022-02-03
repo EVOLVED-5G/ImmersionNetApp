@@ -1,26 +1,24 @@
 import jsonpickle
 
-from monitoring.MonitoringUtils import MonitoringTriggerAnswer
-from msg.MsgUtils import AnswerForVApp
-from msg.QoSMsg import QoSAnswer
+from emulator.MonitoringUtils import MonitoringTriggerAnswer
+from network.msg.MsgUtils import AnswerForVApp
+from network.msg.QoSMsg import QoSAnswer
+from request.general.Core5GRequester import Core5GRequester
 
 
 # RequestManager
 # A class handling requests from the VApp and messages from/to the 5G Core.
 # It triggers the corresponding actions, like answering with dummy data or creating the corresponding 5G API calls
-from qos.Core5GRequestManager import Core5GRequestManager
-
-
 class RequestManager:
     TYPE_INIT_REQUEST = 0
     TYPE_START_MONITORING = 1
 
     def __init__(self, server, app):
         self.server = server
-        self.core5GManager = Core5GRequestManager(self, app)
+        self.core5GManager = Core5GRequester(self, app)
 
     # Handle a QoS request from the vApp
-    def handle_qos_request(self, msg, type_id):
+    def handle_vapp_qos_request(self, msg, type_id):
         if type_id == self.TYPE_INIT_REQUEST:
             asked_qos = msg.qos_params['initialQoSRequest']
             # For now, no 5G API call is triggered
@@ -32,7 +30,7 @@ class RequestManager:
             self.server.add_msg_to_send(jsonpickle.encode(answer, unpicklable=False))
 
     # Handle a monitoring request from the vApp
-    def handle_monitoring_request(self, msg, type_id):
+    def handle_vapp_monitoring_request(self, msg, type_id):
         if type_id == self.TYPE_START_MONITORING:
             content = msg.monitoring_params['toggleMonitoring']
             answer = MonitoringTriggerAnswer(type_id, content['numRequest'],  AnswerForVApp.OK)
@@ -40,10 +38,12 @@ class RequestManager:
             self.server.add_msg_to_send(jsonpickle.encode(answer, unpicklable=False))
 
     def test_nef_emulator_calls(self):
-        self.core5GManager.ask_access_token()
-        self.core5GManager.ask_cells()
-        # self.core5GManager.delete_all_subscriptions()
-        # self.core5GManager.create_monitoring_subscription()
-        self.core5GManager.showcase_sdk_loc1()
+        # Mandatory call to get access token and create APIRequester instances
+        self.core5GManager.start_comm_with_emulator()
+        # Optional calls to showcase the different APIs
+        self.core5GManager.track_ue_location()
+
+
+
 
 

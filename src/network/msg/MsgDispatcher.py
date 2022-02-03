@@ -3,10 +3,10 @@ import re
 
 import jsonpickle
 
-from connection.PoliteThread import PoliteThread
-from monitoring.MonitoringUtils import MonitoringRequest
-from msg.QoSMsg import QoSRequest
-from qos.RequestManager import RequestManager
+from network.threads.PoliteThread import PoliteThread
+from emulator.MonitoringUtils import MonitoringRequest
+from network.msg.QoSMsg import QoSRequest
+from request.general.RequestManager import RequestManager
 
 
 # MsgDispatcher
@@ -34,11 +34,11 @@ class MsgDispatcher(PoliteThread):
             if first_key is not None:
                 if first_key == self.INIT_QOS_REQ:
                     qos_msg = QoSRequest(decoded_msg)
-                    self.qos_handler.handle_qos_request(qos_msg, RequestManager.TYPE_INIT_REQUEST)
+                    self.qos_handler.handle_vapp_qos_request(qos_msg, RequestManager.TYPE_INIT_REQUEST)
 
                 if first_key == self.TOGGLE_MONITORING:
                     monitor_msg = MonitoringRequest(decoded_msg)
-                    self.qos_handler.handle_monitoring_request(monitor_msg, RequestManager.TYPE_START_MONITORING)
+                    self.qos_handler.handle_vapp_monitoring_request(monitor_msg, RequestManager.TYPE_START_MONITORING)
 
     def add_msg(self, msg):
         self.queue_in.put(msg)

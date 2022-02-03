@@ -1,7 +1,7 @@
 import queue
 
-from connection.MsgSenderThread import MsgSenderThread
-from connection.PoliteThread import PoliteThread
+from network.threads.MsgSenderThread import MsgSenderThread
+from network.threads.PoliteThread import PoliteThread
 
 
 # A thread managing in&out messages with an accepted client

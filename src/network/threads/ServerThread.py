@@ -1,7 +1,7 @@
 import socket
 
-from connection.HandleClientThread import HandleClientThread
-from connection.PoliteThread import PoliteThread
+from network.threads.HandleClientThread import HandleClientThread
+from network.threads.PoliteThread import PoliteThread
 
 
 # ServerThread class: accept connections from clients and handle each of them in a dedicated thread
@@ -19,7 +19,7 @@ class ServerThread(PoliteThread):
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.numClient = 0
         self.client_handle = None
-        # Accept any connection (but the client will target localhost for now)
+        # Accept any network (but the client will target localhost for now)
         self.sock.bind(('', self.VAPP_PORT))
 
     def run(self):

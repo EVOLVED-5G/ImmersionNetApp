@@ -1,9 +1,9 @@
 
 from flask import Flask
 
-from connection.ServerThread import ServerThread
-from msg.MsgDispatcher import MsgDispatcher
-from qos.RequestManager import RequestManager
+from network.threads.ServerThread import ServerThread
+from network.msg.MsgDispatcher import MsgDispatcher
+from request.general.RequestManager import RequestManager
 
 
 def print_readme():
@@ -24,14 +24,13 @@ if __name__ == '__main__':
     request_manager = RequestManager(serverThread, app)
     msgDispatcher.set_request_handler(request_manager)
 
-    # Start the threads and the flask server
+    # Start the threads and test calls
     msgDispatcher.start()
     serverThread.start()
 
     request_manager.test_nef_emulator_calls()
+
     # Start the flask server last
     app.run(host="localhost", port=FLASK_SERVER_PORT, debug=False)
-
-
 
 

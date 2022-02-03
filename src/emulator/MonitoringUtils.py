@@ -1,4 +1,4 @@
-from msg.MsgUtils import AnswerForVApp
+from network.msg.MsgUtils import AnswerForVApp
 
 
 # Classes to be translated into Json messages about monitoring

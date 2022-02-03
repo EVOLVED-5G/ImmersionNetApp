@@ -1,13 +1,20 @@
 from evolved5g import swagger_client
-from evolved5g.swagger_client import LoginApi, User
+from evolved5g.swagger_client import LoginApi
 from evolved5g.swagger_client.models import Token
 
 
+class EmulatorAccessToken:
+
+    def __init__(self, token_str, token_type):
+        self.str = token_str
+        self.token_type = token_type
+
+
 def get_token() -> Token:
-    username = "admin@my-email.com"
-    password = "pass"
     # User name and pass matches are set in the .env of the docker of NEF_EMULATOR. See
     # https://github.com/EVOLVED-5G/NEF_emulator
+    username = "admin@my-email.com"
+    password = "pass"
     configuration = swagger_client.Configuration()
     # The host of the 5G API (emulator)
     configuration.host = get_host_of_the_nef_emulator()

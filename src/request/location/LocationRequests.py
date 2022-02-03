@@ -1,29 +1,12 @@
-from evolved5g.swagger_client.rest import ApiException
 from evolved5g.sdk import LocationSubscriber
 import emulator.Emulator_Utils as emulator_utils
 import datetime
 from evolved5g.swagger_client import LoginApi, User
 
-
-def showcase_login_to_the_emulator_and_test_token():
-    """
-    Demonstrate how to interact with the Emulator, to a token and the current logged in User
-    """
-
-    token = emulator_utils.get_token()
-    print("-----")
-    print("Got token")
-    print(token)
-    api_client = emulator_utils.get_api_client(token)
-    api = LoginApi(api_client)
-    print("-----")
-    print("Getting login info")
-    response = api.test_token_api_v1_login_test_token_post_with_http_info()
-    assert isinstance(response[0], User)
-    print(response[0])
+from request.general.APIRequester import APIRequester
 
 
-def showcase_create_subscription_and_retrieve_call_backs(endpointGenerator):
+def showcase_create_subscription_and_retrieve_call_backs(endpoint_generator):
     """
     This example showcases how you can create a subscription to the 5G-API in order to monitor device location.
     In order to run this example you need to follow the instructions in  readme.md in order to a) run the NEF emulator
@@ -32,7 +15,7 @@ def showcase_create_subscription_and_retrieve_call_backs(endpointGenerator):
     """
 
     # Create a subscription, that will notify us 1000 times, for the next 1 day starting from now
-    expire_time = (datetime.datetime.utcnow() + datetime.timedelta(days=1)).isoformat() + "Z"
+    expire_time = (datetime.datetime.utcnow() + datetime.timedelta(hours=1)).isoformat() + "Z"
     netapp_id = "myNetapp"
     host = emulator_utils.get_host_of_the_nef_emulator()
     token = emulator_utils.get_token()
@@ -51,7 +34,7 @@ def showcase_create_subscription_and_retrieve_call_backs(endpointGenerator):
     # See article for details:
     # https://stackoverflow.com/questions/48546124/what-is-linux-equivalent-of-host-docker-internal/61001152
 
-    endpoint = endpointGenerator.start_ue_monitoring()
+    endpoint = endpoint_generator.start_ue_monitoring()
 
     subscription = location_subscriber.create_subscription(
         netapp_id=netapp_id,
@@ -64,11 +47,28 @@ def showcase_create_subscription_and_retrieve_call_backs(endpointGenerator):
     # From now on we should retrieve POST notifications to the endpoint
     print(subscription)
 
-    # How to get all subscriptions
-    all_subscriptions = location_subscriber.get_all_subscriptions(netapp_id, 0, 100)
-    print(all_subscriptions)
 
-    # Request information about a subscription
-    id = subscription.link.split("/")[-1]
-    subscription_info = location_subscriber.get_subscription(netapp_id, id)
-    print(subscription_info)
+class LocationRequester(APIRequester):
+
+    def __init__(self, endpoint_generator, access_token):
+        super().__init__(endpoint_generator, access_token)
+
+    def track_ue_position(self, id_ue=10001, expire_delay=24):
+        expire_time = (datetime.datetime.utcnow() + datetime.timedelta(hours=expire_delay)).isoformat() + "Z"
+        host = emulator_utils.get_host_of_the_nef_emulator()
+        # To find external ids -> go to the online emulator map and click on a User icon
+        external_id = str(id_ue) + "@domain.com"
+        endpoint = self.endpoint_gen.start_ue_monitoring()
+        location_subscriber = LocationSubscriber(host, self.token.access_token)
+
+        subscription = location_subscriber.create_subscription(
+            netapp_id=self.NETAPP_ID,
+            external_id=external_id,
+            notification_destination=endpoint,
+            maximum_number_of_reports=1000,
+            monitor_expire_time=expire_time
+        )
+
+        # From now on we should retrieve POST notifications to the endpoint
+        print(subscription)
+
