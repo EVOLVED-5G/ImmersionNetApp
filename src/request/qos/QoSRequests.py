@@ -1,6 +1,8 @@
 from evolved5g.sdk import QosAwareness
 from evolved5g.swagger_client import UsageThreshold
 from evolved5g.swagger_client.rest import ApiException
+
+from request.endpoint.EndpointUtils import EndpointType
 from request.general.APIRequester import APIRequester
 
 
@@ -8,8 +10,8 @@ from request.general.APIRequester import APIRequester
 # It relies on 1) the QosAwareness class from the SDK and 2) on the AsSessionWithQos API
 class QoSRequester(APIRequester):
 
-    def __init__(self, endpoint_generator, access_token):
-        super().__init__(endpoint_generator, access_token)
+    def __init__(self, flask_th, access_token):
+        super().__init__(flask_th, access_token)
         self.qos_awareness = QosAwareness(self.host, self.token.access_token)
 
     def create_gbr_subscription(self, ue_ipv4="10.0.0.1"):
@@ -26,7 +28,7 @@ class QoSRequester(APIRequester):
                                          uplink_volume=5 * gigabyte  # 5 Gigabytes for uplink
                                          )
 
-        notification_destination = self.endpoint_gen.create_gbr_monitoring_endpoint()
+        notification_destination = self.flask_thread.add_endpoint(EndpointType.UE_GBR)
 
         subscription = self.qos_awareness.create_guaranteed_bit_rate_subscription(
             netapp_id=self.NETAPP_ID,
@@ -44,7 +46,7 @@ class QoSRequester(APIRequester):
         # a) two users connect to the same cell at the same time (which is how NEF simulates loss of GBT), or
         # b) when Usage threshold is exceeded(notice this is not supported by the NEF,
         #    so you will never retrieve this notification while testing with the NEF)
-        print(subscription)
+        # print(subscription)
 
     def read_and_delete_all_existing_subscriptions(self):
         try:
@@ -59,5 +61,19 @@ class QoSRequester(APIRequester):
             if ex.status == 404:
                 print("No active transcriptions found")
             else: # something else happened, re-throw the exception
+                raise
+
+    def delete_all_existing_subscriptions(self):
+        try:
+            all_subscriptions = self.qos_awareness.get_all_subscriptions(self.NETAPP_ID)
+
+            for subscription in all_subscriptions:
+                id_sub = subscription.link.split("/")[-1]
+                self.qos_awareness.delete_subscription(self.NETAPP_ID, id_sub)
+
+        except ApiException as ex:
+            if ex.status == 404:
+                print("No active transcriptions found")
+            else:  # something else happened, re-throw the exception
                 raise
 

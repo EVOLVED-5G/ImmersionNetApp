@@ -1,7 +1,7 @@
 import jsonpickle
 import requests
 from emulator.Emulator_Utils import EmulatorAccessToken
-from request.general.EndPointGenerator import EndPointGenerator
+from request.endpoint.EndPointGenerator import EndPointGenerator
 from datetime import datetime, timedelta
 
 

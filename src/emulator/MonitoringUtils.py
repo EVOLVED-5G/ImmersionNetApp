@@ -18,7 +18,7 @@ class MonitoringParams(object):
 
 class MonitoringTriggerAnswer(AnswerForVApp):
 
-    def __init__(self, type_msg, num, status):
-        super().__init__(type_msg, num, status)
+    def __init__(self, type_msg, type_content, status):
+        super().__init__(type_msg, type_content, status)
 
 

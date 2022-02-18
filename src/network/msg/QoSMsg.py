@@ -4,8 +4,8 @@ from network.msg.MsgUtils import AnswerForVApp
 
 class QoSAnswer(AnswerForVApp):
 
-    def __init__(self, type_msg, num, status, proposed_qos):
-        super().__init__(type_msg, num, status)
+    def __init__(self, type_msg, type_content, status, proposed_qos):
+        super().__init__(type_msg, type_content, status)
         self.content = JsonAnswerContent(proposed_qos)
 
 
@@ -23,8 +23,7 @@ class QoSRequest(object):
 
 class QoSParams(object):
 
-    def __init__(self, num, l_max, l_desired, bandwidth):
-        self.num = num
+    def __init__(self, l_max, l_desired, bandwidth):
         self.max_latency = l_max
         self.desired_latency = l_desired
         self.bandwidth = bandwidth

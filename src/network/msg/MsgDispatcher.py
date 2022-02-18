@@ -3,14 +3,17 @@ import re
 
 import jsonpickle
 
+from network.msg import MsgUtils
 from network.threads.PoliteThread import PoliteThread
 from emulator.MonitoringUtils import MonitoringRequest
 from network.msg.QoSMsg import QoSRequest
-from request.general.RequestManager import RequestManager
 
 
 # MsgDispatcher
 # Thread receiving the incoming msg from the network. It decodes and passes them to the corresponding handler
+from utils.JsonpickleUtils import JsonEnumHandler
+
+
 class MsgDispatcher(PoliteThread):
 
     MSG_QUEUE_LIMIT = 256
@@ -34,15 +37,21 @@ class MsgDispatcher(PoliteThread):
             if first_key is not None:
                 if first_key == self.INIT_QOS_REQ:
                     qos_msg = QoSRequest(decoded_msg)
-                    self.qos_handler.handle_vapp_qos_request(qos_msg, RequestManager.TYPE_INIT_REQUEST)
+                    self.qos_handler.handle_vapp_qos_request(qos_msg, MsgUtils.ContentType.TYPE_INIT_REQUEST)
 
                 if first_key == self.TOGGLE_MONITORING:
                     monitor_msg = MonitoringRequest(decoded_msg)
-                    self.qos_handler.handle_vapp_monitoring_request(monitor_msg, RequestManager.TYPE_START_MONITORING)
+                    self.qos_handler.handle_vapp_monitoring_request(monitor_msg,
+                                                                    MsgUtils.ContentType.TYPE_START_MONITORING)
+            else:
+                print("Unknown or absent json key, cannot read this msg")
 
     def add_msg(self, msg):
         self.queue_in.put(msg)
 
-    def set_request_handler(self, qh):
+    def prepare_handlers(self, qh):
         self.qos_handler = qh
+        jsonpickle.handlers.registry.register(MsgUtils.MsgType, JsonEnumHandler)
+        jsonpickle.handlers.registry.register(MsgUtils.ContentType, JsonEnumHandler)
+        jsonpickle.handlers.registry.register(MsgUtils.AnswerStatus, JsonEnumHandler)
 
