@@ -12,9 +12,6 @@ def print_readme():
     print(msg)
 
 
-# FLASK_SERVER_PORT = 9999
-# app = Flask(__name__)
-
 if __name__ == '__main__':
     print_readme()
 
@@ -31,8 +28,5 @@ if __name__ == '__main__':
     request_manager.start_communications()
     # request_manager.test_nef_emulator_calls()
 
-    # Start the flask server last
-    # threading.Thread(target=lambda: app.run(host="localhost", port=FLASK_SERVER_PORT,
-    #                                         debug=False, use_reloader=False)).start()
 
 

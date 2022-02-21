@@ -1,9 +1,10 @@
-import enum
 
 from request.endpoint.EndpointUtils import EndpointType
 from request.general import FlaskThread
 
 
+# Class handling the creation of Endpoint objects
+# In particular, it manages the corresponding urls depending on each endpoint type
 class EndPointGenerator:
 
     def __init__(self):
@@ -15,23 +16,14 @@ class EndPointGenerator:
         if type_endpoint == EndpointType.UE_LOCATION:
             endpoint = CustomEndpoint(type_endpoint, "/monitoring/loc" + str(self.num_location_ep), func)
             self.num_location_ep += 1
-
         elif type_endpoint == EndpointType.UE_GBR:
             endpoint = CustomEndpoint(type_endpoint, "/monitoring/gbr" + str(self.num_gbr_ep), func)
             self.num_gbr_ep += 1
-
         else:
-            endpoint = None
             raise NameError('Unknown endpoint type id ' + str(type_endpoint))
 
         self.endpoints.append(endpoint)
         return endpoint
-
-    def get_loc_endpoint(self):
-        return self.endpoints[0]
-
-    def get_gbr_endpoint(self):
-        return self.endpoints[1]
 
 
 class CustomEndpoint:

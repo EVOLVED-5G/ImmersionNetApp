@@ -2,7 +2,7 @@ import jsonpickle
 
 from emulator.MonitoringUtils import MonitoringTriggerAnswer
 from network.msg import MsgUtils
-from network.msg.QoSMsg import QoSAnswer
+from network.msg.QoSMsg import QosMsg
 from request.general.Core5GRequester import Core5GRequester
 
 
@@ -16,17 +16,15 @@ class RequestManager:
 
     def __init__(self, server):
         self.server = server
-        self.flask_thread = FlaskThread()
+        self.flask_thread = FlaskThread(self)
         self.core5GManager = Core5GRequester(self, self.flask_thread)
 
     # Handle a QoS request from the vApp
     def handle_vapp_qos_request(self, msg, content_type):
         if content_type == MsgUtils.ContentType.TYPE_INIT_REQUEST:
             asked_qos = msg.qos_params['initialQoSRequest']
-            # For now, no 5G API call is triggered
             # Simply create a dummy answer and send it back to the vApp
-            # Dummy answer saying OK, includes either None or the asked QoS
-            answer = QoSAnswer(MsgUtils.MsgType.ANSWER, content_type, MsgUtils.AnswerStatus.OK, asked_qos)
+            answer = QosMsg(MsgUtils.MsgType.ANSWER, content_type, MsgUtils.AnswerStatus.OK, asked_qos)
             # Translate it into json with the unpickable flag set to false to remove jsonpickle artifacts
             self.server.add_msg_to_send(jsonpickle.encode(answer, unpicklable=False, make_refs=False))
 
@@ -51,11 +49,13 @@ class RequestManager:
 
     def test_nef_emulator_calls(self):
         # Optional calls to showcase the different APIs
-        self.core5GManager.track_ue_location()
+        self.core5GManager.track_ue_location(id_ue=10001)
         self.core5GManager.start_gbr_monitoring(ue_ipv4="10.0.0.1")
 
     def notify_vapp(self, notif):
         self.server.add_msg_to_send(jsonpickle.encode(notif, unpicklable=False))
+
+
 
 
 
