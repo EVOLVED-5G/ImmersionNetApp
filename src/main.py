@@ -1,6 +1,3 @@
-import threading
-
-from flask import Flask
 
 from network.threads.ServerThread import ServerThread
 from network.msg.MsgDispatcher import MsgDispatcher

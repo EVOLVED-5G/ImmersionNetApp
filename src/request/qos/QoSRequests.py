@@ -31,7 +31,7 @@ class QoSRequester(APIRequester):
         notification_destination = self.flask_thread.add_endpoint(EndpointType.UE_GBR)
 
         subscription = self.qos_awareness.create_guaranteed_bit_rate_subscription(
-            netapp_id=self.NETAPP_ID,
+            netapp_id=self.netapp_id,
             equipment_network_identifier=ue_ipv4,
             network_identifier=network_identifier,
             notification_destination=notification_destination,
@@ -50,13 +50,13 @@ class QoSRequester(APIRequester):
 
     def read_and_delete_all_existing_subscriptions(self):
         try:
-            all_subscriptions = self.qos_awareness.get_all_subscriptions(self.NETAPP_ID)
+            all_subscriptions = self.qos_awareness.get_all_subscriptions(self.netapp_id)
             print(all_subscriptions)
 
             for subscription in all_subscriptions:
                 id_sub = subscription.link.split("/")[-1]
                 print("Deleting subscription with id: " + id_sub)
-                self.qos_awareness.delete_subscription(self.NETAPP_ID, id_sub)
+                self.qos_awareness.delete_subscription(self.netapp_id, id_sub)
         except ApiException as ex:
             if ex.status == 404:
                 print("No active transcriptions found")
@@ -65,11 +65,11 @@ class QoSRequester(APIRequester):
 
     def delete_all_existing_subscriptions(self):
         try:
-            all_subscriptions = self.qos_awareness.get_all_subscriptions(self.NETAPP_ID)
+            all_subscriptions = self.qos_awareness.get_all_subscriptions(self.netapp_id)
 
             for subscription in all_subscriptions:
                 id_sub = subscription.link.split("/")[-1]
-                self.qos_awareness.delete_subscription(self.NETAPP_ID, id_sub)
+                self.qos_awareness.delete_subscription(self.netapp_id, id_sub)
 
         except ApiException as ex:
             if ex.status == 404:

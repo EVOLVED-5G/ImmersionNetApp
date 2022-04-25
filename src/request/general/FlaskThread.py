@@ -8,8 +8,8 @@ from request.endpoint.EndPointGenerator import EndPointGenerator
 from request.endpoint.EndpointUtils import EndpointType
 from request.location.LocationUtils import LocationVal, LocationNotif
 from request.qos.QosUtils import QosVal, QosNotif
-
-FLASK_SERVER_PORT = 9999
+from utils import ConfigUtils
+from utils.ConfigUtils import BaseNetappConfig
 
 
 def on_post_general_notif():
@@ -28,12 +28,14 @@ class FlaskThread(threading.Thread):
         self.queue = Queue()
         self.must_stop = False
         self.app = Flask(__name__)
-        self.endpointGenerator = EndPointGenerator()
         self.request_handler = request_handler
+        config = ConfigUtils.read_config()
+        self.port = config.flask.port
+        self.endpointGenerator = EndPointGenerator(self.port)
 
     def run(self):
         # Start the Flask server in a dedicated thread to avoid being blocked here
-        threading.Thread(target=lambda: self.app.run(host="localhost", port=FLASK_SERVER_PORT,
+        threading.Thread(target=lambda: self.app.run(host="localhost", port=self.port,
                                                      debug=False, use_reloader=False)).start()
         while not self.must_stop:
             # Blocking call, waiting until we are asked to create a route

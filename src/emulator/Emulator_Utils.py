@@ -2,6 +2,8 @@ from evolved5g import swagger_client
 from evolved5g.swagger_client import LoginApi
 from evolved5g.swagger_client.models import Token
 
+from utils import ConfigUtils
+
 
 class EmulatorAccessToken:
 
@@ -34,5 +36,6 @@ def get_api_client(token) -> swagger_client.ApiClient:
 
 
 def get_host_of_the_nef_emulator() -> str:
-    return "http://localhost:8888"
+    config = ConfigUtils.read_config()
+    return config.emulator.nef_host
 

@@ -1,0 +1,16 @@
+{
+  "serverForVApp": {
+    "ipv4": "127.0.0.1",
+    "port": 9877
+  },
+  "flask": {
+    "port": 9999
+  },
+  "emulator": {
+    "localhost": "http://host.docker.internal:",
+    "nef_host": "http://localhost:8888"
+  },
+  "netapp": {
+    "id": "myNetapp"
+  }
+}

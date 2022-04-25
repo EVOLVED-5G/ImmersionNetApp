@@ -30,5 +30,5 @@ class MsgSenderThread(PoliteThread):
             if sent == 0:
                 raise RuntimeError("Socket network broken, nothing could be sent.")
             total_send += sent
-        print("Message sent!")
+
 

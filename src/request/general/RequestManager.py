@@ -1,17 +1,14 @@
 import jsonpickle
-
 from emulator.MonitoringUtils import MonitoringTriggerAnswer
 from network.msg import MsgUtils
-from network.msg.QoSMsg import QosMsg
+from request.qos.QoSMsg import QosMsg
 from request.general.Core5GRequester import Core5GRequester
+from request.general.FlaskThread import FlaskThread
 
 
 # RequestManager
 # A class handling requests from the VApp and messages from/to the 5G Core.
 # It triggers the corresponding actions, like answering with dummy data or creating the corresponding 5G API calls
-from request.general.FlaskThread import FlaskThread
-
-
 class RequestManager:
 
     def __init__(self, server):
