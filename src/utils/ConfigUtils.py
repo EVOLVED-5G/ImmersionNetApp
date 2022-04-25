@@ -2,7 +2,15 @@ import jsonpickle
 
 
 def read_config():
-    with open("./DefaultConfig.json") as f:
+    with open("./ConfigChoice.txt") as f:
+        chosen_config = f.read()
+
+    if chosen_config == "container":
+        config_file = "./ContainerConfig.json"
+    else:
+        config_file = "./DefaultConfig.json"
+
+    with open(config_file) as f:
         jconfig = jsonpickle.decode(f.read())
         return BaseNetappConfig(jconfig)
 
