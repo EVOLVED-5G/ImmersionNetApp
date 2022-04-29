@@ -35,10 +35,12 @@ class FlaskThread(threading.Thread):
 
     def run(self):
         # Start the Flask server in a dedicated thread to avoid being blocked here
-        threading.Thread(target=lambda: self.app.run(host="localhost", port=self.port,
+        # Note: use "0.0.0.0" as host to make sure this Flask server will be reachable for the NEF emulator
+        threading.Thread(target=lambda: self.app.run(host="0.0.0.0", port=self.port,
                                                      debug=False, use_reloader=False)).start()
         while not self.must_stop:
             # Blocking call, waiting until we are asked to create a route
+
             endpoint = self.queue.get(True)
             self.app.add_url_rule(endpoint.url_rule, methods=['POST'], view_func=endpoint.func)
             print("Adding rule for endpoint " + endpoint.complete_url)
