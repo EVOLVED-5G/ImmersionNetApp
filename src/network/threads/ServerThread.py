@@ -1,16 +1,15 @@
 import socket
+import jsonpickle
 
 from network.threads.HandleClientThread import HandleClientThread
 from network.threads.PoliteThread import PoliteThread
+from utils import ConfigUtils
+from utils.ConfigUtils import BaseNetappConfig
 
 
 # ServerThread class: accept connections from clients and handle each of them in a dedicated thread
+# For now, run the NetApp locally. The HMD will be on the same local network and will be able to access to this machine.
 class ServerThread(PoliteThread):
-
-    mustRun = True
-    # Run the NetApp locally. The HMD will be on the same local network and will be able to access to this machine.
-    IPV4_ADDR = "127.0.0.1"
-    VAPP_PORT = 9877
 
     def __init__(self, msg_dispatcher):
         super().__init__()
@@ -19,11 +18,14 @@ class ServerThread(PoliteThread):
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.numClient = 0
         self.client_handle = None
-        # Accept any network (but the client will target localhost for now)
-        self.sock.bind(('', self.VAPP_PORT))
+        # Read the config to know which ip and port to use for the server
+        config = ConfigUtils.read_config()
+        self.serv_addr = config.serverForVApp.ipv4_addr
+        self.serv_port = config.serverForVApp.port
+        self.sock.bind((self.serv_addr, self.serv_port))
 
     def run(self):
-        while self.mustRun:
+        while self.must_run:
             self.sock.listen()
             print("Server waiting for incoming client...")
             client_socket = self.sock.accept()[0]

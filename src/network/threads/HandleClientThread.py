@@ -7,7 +7,6 @@ from network.threads.PoliteThread import PoliteThread
 # A thread managing in&out messages with an accepted client
 class HandleClientThread(PoliteThread):
 
-    must_run = True
     SIZE_INT = 4
     MSG_QUEUE_LIMIT = 256
 
