@@ -14,7 +14,7 @@ class LocationRequester(APIRequester):
         self.location_subscriber = LocationSubscriber(self.host, self.token.access_token)
 
     # Create a subscription to be informed when the given UE moves to a new cell
-    def track_ue_position(self, id_ue=10001, expire_delay=24):
+    def monitor_subscription(self, id_ue=10001, expire_delay=24):
         expire_time = (datetime.datetime.utcnow() + datetime.timedelta(hours=expire_delay)).isoformat() + "Z"
         # To find external ids -> go to the online emulator map and click on a User icon
         external_id = str(id_ue) + "@domain.com"
@@ -49,7 +49,7 @@ class LocationRequester(APIRequester):
                 self.location_subscriber.delete_subscription(self.netapp_id, id_sub)
         except ApiException as ex:
             if ex.status == 404:
-                print("No active transcriptions found")
+                print("No active location subscription found")
             else: # something else happened, re-throw the exception
                 raise
 

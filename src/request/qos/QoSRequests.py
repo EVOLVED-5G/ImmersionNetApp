@@ -14,7 +14,7 @@ class QoSRequester(APIRequester):
         super().__init__(flask_th, access_token)
         self.qos_awareness = QosAwareness(self.host, self.token.access_token)
 
-    def create_gbr_subscription(self, ue_ipv4="10.0.0.1"):
+    def sessionqos_subscription(self, ue_ipv4="10.0.0.1"):
         network_identifier = QosAwareness.NetworkIdentifier.IP_V4_ADDRESS
         # In this scenario we monitor UPLINK
         uplink = QosAwareness.QosMonitoringParameter.UPLINK
@@ -39,8 +39,8 @@ class QoSRequester(APIRequester):
             usage_threshold=usage_threshold,
             qos_monitoring_parameter=uplink,
             threshold=uplink_threshold,
-            wait_time_between_reports=10
-
+            # reporting_mode=QosAwareness.EventTriggeredReportingConfiguration(wait_time_in_seconds=10)
+            reporting_mode= QosAwareness.PeriodicReportConfiguration(repetition_period_in_seconds=10)
         )
         # From now on we should retrieve POST notifications when:
         # a) two users connect to the same cell at the same time (which is how NEF simulates loss of GBT), or
@@ -59,7 +59,7 @@ class QoSRequester(APIRequester):
                 self.qos_awareness.delete_subscription(self.netapp_id, id_sub)
         except ApiException as ex:
             if ex.status == 404:
-                print("No active transcriptions found")
+                print("No active qos subscription found")
             else: # something else happened, re-throw the exception
                 raise
 

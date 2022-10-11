@@ -1,0 +1,15 @@
+version: '3'
+services:
+ imm_netapp:
+    image: imm_netapp
+    container_name: imm_netapp
+    build:
+      context: ./src # For now, the python code of the NetApp is in this .src directory
+    ports:
+      # Old version: - 80:80, left is host side and right is container side according to https://docs.docker.com/compose/compose-file/#ports
+      - "9876"
+      - "9877"
+      - "9998"
+      - "9999"
+      
+      

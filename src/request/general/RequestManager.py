@@ -31,9 +31,10 @@ class RequestManager:
             # Extract monitoring parameters if required
             content = msg.monitoring_params['toggleMonitoring']
             # Start both UE location and QoS monitoring
-            self.core5GManager.track_ue_location(id_ue=10001)
-            self.core5GManager.track_ue_location(id_ue=10003)
-            self.core5GManager.start_gbr_monitoring(ue_ipv4="10.0.0.1")
+            self.core5GManager.track_ue_location(id_ue=10002)
+            self.core5GManager.track_ue_location(id_ue=10004)
+            self.core5GManager.start_gbr_monitoring(ue_ipv4="10.0.0.2")
+            self.core5GManager.start_gbr_monitoring(ue_ipv4="10.0.0.4")
             # Inform the vApp that we accepted the monitoring request
             answer = MonitoringTriggerAnswer(MsgUtils.MsgType.ANSWER, content_type, MsgUtils.AnswerStatus.OK)
             self.server.add_msg_to_send(jsonpickle.encode(answer, unpicklable=False, make_refs=False))
@@ -46,8 +47,10 @@ class RequestManager:
 
     def test_nef_emulator_calls(self):
         # Optional calls to showcase the different APIs
-        self.core5GManager.track_ue_location(id_ue=10001)
-        self.core5GManager.start_gbr_monitoring(ue_ipv4="10.0.0.1")
+        self.core5GManager.track_ue_location(id_ue=10002)
+        self.core5GManager.start_gbr_monitoring(ue_ipv4="10.0.0.2")
+        self.core5GManager.track_ue_location(id_ue=10004)
+        self.core5GManager.start_gbr_monitoring(ue_ipv4="10.0.0.4")
 
     def notify_vapp(self, notif):
         self.server.add_msg_to_send(jsonpickle.encode(notif, unpicklable=False))

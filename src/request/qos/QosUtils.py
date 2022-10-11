@@ -22,7 +22,10 @@ class QosVal:
 
     def __init__(self, ue_id, is_qos_guaranteed):
         self.ue_id = ue_id
-        self.is_qos_guaranteed = is_qos_guaranteed
+        if "NOT" in is_qos_guaranteed:
+            self.is_qos_guaranteed = False
+        else:
+            self.is_qos_guaranteed = True
 
     def to_display_string(self):
         if self.is_qos_guaranteed:
