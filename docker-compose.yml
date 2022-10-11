@@ -12,4 +12,8 @@ services:
       - "9998"
       - "9999"
       
-      
+      # Should we use this instead since this version of the NetApp will be containerized anyway?
+      #- "9877"
+      #- "9999:8888"
+
+
