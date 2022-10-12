@@ -1,8 +1,17 @@
+import tkinter
+
+from tkinter import *
+from tkinter import ttk
+
+from PIL import ImageTk, Image
 
 from network.threads.ServerThread import ServerThread
 from network.msg.MsgDispatcher import MsgDispatcher
 from request.general.RequestManager import RequestManager
 import argparse
+
+
+from states.Welcome import Welcome
 
 
 def welcome():
@@ -24,18 +33,22 @@ def read_command_line_args():
 
 if __name__ == '__main__':
     welcome()
+    
+    root = Tk()
+    Welcome(root)
+    root.mainloop()
 
     # Initialize all components in the correct order
-    msgDispatcher = MsgDispatcher()
-    serverThread = ServerThread(msgDispatcher)
-    request_manager = RequestManager(serverThread)
-    msgDispatcher.prepare_handlers(request_manager)
+    # msgDispatcher = MsgDispatcher()
+    # serverThread = ServerThread(msgDispatcher)
+    # request_manager = RequestManager(serverThread)
+    # msgDispatcher.prepare_handlers(request_manager)
+    #
+    # # Start the threads and test calls
+    # msgDispatcher.start()
+    # serverThread.start()
 
-    # Start the threads and test calls
-    msgDispatcher.start()
-    serverThread.start()
-
-    request_manager.start_communications()
+    # request_manager.start_communications()
     # request_manager.test_nef_emulator_calls()
 
 
