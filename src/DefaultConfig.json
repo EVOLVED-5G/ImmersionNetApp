@@ -1,10 +1,10 @@
 {
   "serverForVApp": {
     "ipv4": "127.0.0.1",
-    "port": 9877
+    "port": 9876
   },
   "flask": {
-    "port": 9999
+    "port": 9998
   },
   "emulator": {
     "localhost": "http://host.docker.internal:",

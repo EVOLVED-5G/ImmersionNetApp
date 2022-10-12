@@ -40,7 +40,6 @@ class FlaskThread(threading.Thread):
                                                      debug=False, use_reloader=False)).start()
         while not self.must_stop:
             # Blocking call, waiting until we are asked to create a route
-
             endpoint = self.queue.get(True)
             self.app.add_url_rule(endpoint.url_rule, methods=['POST'], view_func=endpoint.func)
             print("Adding rule for endpoint " + endpoint.complete_url)

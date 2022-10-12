@@ -6,7 +6,7 @@ import argparse
 
 
 def welcome():
-    msg = "This is the IMM NetApp, version 2.0. This NetApp is built within the Evolved-5G european project."
+    msg = "This is the IMM NetApp, version 2.1. This NetApp is built within the Evolved-5G european project."
     print(msg)
     args = read_command_line_args()
     print("Using the " + args.config + " config")
