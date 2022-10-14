@@ -33,8 +33,12 @@ def read_command_line_args():
 
 if __name__ == '__main__':
     welcome()
-    
+
+    # Start the Tkinter GUI
     root = Tk()
+    style = ttk.Style(root)
+    root.tk.call('source', 'theme/breeze-dark/breeze-dark.tcl')
+    style.theme_use('breeze-dark')
     Welcome(root)
     root.mainloop()
 
