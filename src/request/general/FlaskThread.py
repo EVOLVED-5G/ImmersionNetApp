@@ -28,6 +28,10 @@ def dashboard():
     return render_template('Dashboard.html')
 
 
+def debug_page():
+    return render_template('debug.html')
+
+
 def add_numbers():
     a = request.args.get('a', 0, type=int)
     b = request.args.get('b', 0, type=int)
@@ -57,6 +61,7 @@ class FlaskThread(threading.Thread):
         # Add basic rules for GET methods
         self.app.add_url_rule('/', methods=['GET'], view_func=hello_test)
         self.app.add_url_rule('/dashboard', methods=['GET'], view_func=dashboard)
+        self.app.add_url_rule('/debug', methods=['GET'], view_func=debug_page)
         self.app.add_url_rule('/_add_numbers', view_func=add_numbers)
 
         while not self.must_stop:
