@@ -1,15 +1,12 @@
 import tkinter
-
 from tkinter import *
 from tkinter import ttk
-
 from PIL import ImageTk, Image
 
 from network.threads.ServerThread import ServerThread
 from network.msg.MsgDispatcher import MsgDispatcher
 from request.general.RequestManager import RequestManager
 import argparse
-
 
 from states.Welcome import Welcome
 
@@ -35,25 +32,25 @@ if __name__ == '__main__':
     welcome()
 
     # Start the Tkinter GUI
-    root = Tk()
-    style = ttk.Style(root)
-    root.tk.call('source', 'theme/breeze-dark/breeze-dark.tcl')
-    style.theme_use('breeze-dark')
-    Welcome(root)
-    root.mainloop()
+    # root = Tk()
+    # style = ttk.Style(root)
+    # root.tk.call('source', 'theme/breeze-dark/breeze-dark.tcl')
+    # style.theme_use('breeze-dark')
+    # Welcome(root)
+    # root.mainloop()
 
     # Initialize all components in the correct order
-    # msgDispatcher = MsgDispatcher()
-    # serverThread = ServerThread(msgDispatcher)
-    # request_manager = RequestManager(serverThread)
-    # msgDispatcher.prepare_handlers(request_manager)
-    #
-    # # Start the threads and test calls
-    # msgDispatcher.start()
-    # serverThread.start()
+    msgDispatcher = MsgDispatcher()
+    serverThread = ServerThread(msgDispatcher)
+    request_manager = RequestManager(serverThread)
+    msgDispatcher.prepare_handlers(request_manager)
 
-    # request_manager.start_communications()
-    # request_manager.test_nef_emulator_calls()
+    # Start the threads and test calls
+    msgDispatcher.start()
+    serverThread.start()
+
+    request_manager.start_communications()
+    request_manager.test_nef_emulator_calls()
 
 
 

@@ -1,7 +1,7 @@
 import threading
 from queue import Queue
 import jsonpickle
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 
 from network.msg import MsgUtils
 from request.endpoint.EndPointGenerator import EndPointGenerator
@@ -20,6 +20,21 @@ def on_post_general_notif():
     return resp
 
 
+def hello_test():
+    return render_template('index.html')
+
+
+def dashboard():
+    return render_template('Dashboard.html')
+
+
+def add_numbers():
+    a = request.args.get('a', 0, type=int)
+    b = request.args.get('b', 0, type=int)
+    print('Ok')
+    return jsonify(result=a + b)
+
+
 # A dedicated class to 1) run the flask server in a dedicated thread and 2) create rules/endpoints at runtime
 class FlaskThread(threading.Thread):
 
@@ -27,6 +42,7 @@ class FlaskThread(threading.Thread):
         super().__init__()
         self.queue = Queue()
         self.must_stop = False
+        # self.app = Flask(__name__, template_folder="src/templates")
         self.app = Flask(__name__)
         self.request_handler = request_handler
         config = ConfigUtils.read_config()
@@ -38,6 +54,11 @@ class FlaskThread(threading.Thread):
         # Note: use "0.0.0.0" as host to make sure this Flask server will be reachable for the NEF emulator
         threading.Thread(target=lambda: self.app.run(host="0.0.0.0", port=self.port,
                                                      debug=False, use_reloader=False)).start()
+        # Add basic rules for GET methods
+        self.app.add_url_rule('/', methods=['GET'], view_func=hello_test)
+        self.app.add_url_rule('/dashboard', methods=['GET'], view_func=dashboard)
+        self.app.add_url_rule('/_add_numbers', view_func=add_numbers)
+
         while not self.must_stop:
             # Blocking call, waiting until we are asked to create a route
             endpoint = self.queue.get(True)
