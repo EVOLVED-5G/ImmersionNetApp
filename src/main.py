@@ -1,14 +1,7 @@
-import tkinter
-from tkinter import *
-from tkinter import ttk
-from PIL import ImageTk, Image
-
-from network.threads.ServerThread import ServerThread
-from network.msg.MsgDispatcher import MsgDispatcher
-from request.general.RequestManager import RequestManager
+from python.network.threads.ServerThread import ServerThread
+from python.network.msg.MsgDispatcher import MsgDispatcher
+from python.request.general.RequestManager import RequestManager
 import argparse
-
-from states.Welcome import Welcome
 
 
 def welcome():
