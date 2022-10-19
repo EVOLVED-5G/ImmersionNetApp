@@ -23,7 +23,7 @@ class LocationRequester(APIRequester):
             netapp_id=self.netapp_id,
             external_id=external_id,
             # notification_destination=self.endpoint_gen.get_loc_endpoint().complete_url,
-            notification_destination=self.flask_thread.add_endpoint(EndpointType.UE_LOCATION),
+            notification_destination=self.flask_thread.add_5gcore_endpoint(EndpointType.UE_LOCATION),
             maximum_number_of_reports=1000,
             monitor_expire_time=expire_time
         )

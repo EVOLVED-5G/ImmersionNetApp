@@ -28,7 +28,7 @@ class QoSRequester(APIRequester):
                                          uplink_volume=5 * gigabyte  # 5 Gigabytes for uplink
                                          )
 
-        notification_destination = self.flask_thread.add_endpoint(EndpointType.UE_GBR)
+        notification_destination = self.flask_thread.add_5gcore_endpoint(EndpointType.UE_GBR)
 
         subscription = self.qos_awareness.create_guaranteed_bit_rate_subscription(
             netapp_id=self.netapp_id,

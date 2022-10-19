@@ -8,6 +8,7 @@ from python.request.endpoint.EndPointGenerator import EndPointGenerator
 from python.request.endpoint.EndpointUtils import EndpointType
 from python.request.location.LocationUtils import LocationVal, LocationNotif
 from python.request.qos.QosUtils import QosVal, QosNotif
+from python.request.web.WebRequestHandler import WebRequestHandler
 from python.utils import ConfigUtils
 
 
@@ -17,25 +18,6 @@ def on_post_general_notif():
     resp = jsonify(success=True)
     resp.status_code = 200
     return resp
-
-
-def hello_test():
-    return render_template('index.html')
-
-
-def dashboard():
-    return render_template('Dashboard.html')
-
-
-def debug_page():
-    return render_template('debug.html')
-
-
-def add_numbers():
-    a = request.args.get('a', 0, type=int)
-    b = request.args.get('b', 0, type=int)
-    print('Ok')
-    return jsonify(result=a + b)
 
 
 # A dedicated class to 1) run the flask server in a dedicated thread and 2) create rules/endpoints at runtime
@@ -51,6 +33,7 @@ class FlaskThread(threading.Thread):
         config = ConfigUtils.read_config()
         self.port = config.flask.port
         self.endpointGenerator = EndPointGenerator(self.port)
+        self.webHandler = WebRequestHandler(self)
 
     def run(self):
         # Start the Flask server in a dedicated thread to avoid being blocked here
@@ -58,29 +41,30 @@ class FlaskThread(threading.Thread):
         threading.Thread(target=lambda: self.app.run(host="0.0.0.0", port=self.port,
                                                      debug=False, use_reloader=False)).start()
         # Add basic rules for GET methods
-        self.app.add_url_rule('/', methods=['GET'], view_func=hello_test)
-        self.app.add_url_rule('/dashboard', methods=['GET'], view_func=dashboard)
-        self.app.add_url_rule('/debug', methods=['GET'], view_func=debug_page)
-        self.app.add_url_rule('/_add_numbers', view_func=add_numbers)
+        self.webHandler.init_get_rules()
 
         while not self.must_stop:
             # Blocking call, waiting until we are asked to create a route
             endpoint = self.queue.get(True)
-            self.app.add_url_rule(endpoint.url_rule, methods=['POST'], view_func=endpoint.func)
-            print("Adding rule for endpoint " + endpoint.complete_url)
+            self.app.add_url_rule(endpoint.url_rule, methods=endpoint.methods, view_func=endpoint.func)
 
     # Call this to dynamically create an endpoint of the given type (+the corresponding rule for the flask server)
     # This method should return the complete endpoint url
-    def add_endpoint(self, type_ep):
+    def add_5gcore_endpoint(self, type_ep):
         if type_ep == EndpointType.UE_LOCATION:
             func = self.on_post_location_notif
         elif type_ep == EndpointType.UE_GBR:
             func = self.on_post_qos_notif
         else:
             func = on_post_general_notif
-        ep = self.endpointGenerator.create_dynamic_endpoint(func, type_ep)
+        ep = self.endpointGenerator.create_5gcore_endpoint(func, type_ep)
         self.queue.put(ep)
+        print("Will add rule for created 5GCore endpoint " + ep.complete_url)
         return ep.complete_url
+
+    def add_web_endpoint(self, url, func):
+        ep = self.endpointGenerator.create_web_endpoint(url, func)
+        self.queue.put(ep)
 
     def on_post_location_notif(self):
         notif_json = request.json
