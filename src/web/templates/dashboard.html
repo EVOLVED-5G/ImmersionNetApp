@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %} IMM NetApp {% endblock %}
+
+{% block content %}
+<blockquote class="blockquote text-center">
+    <h1>Main dashboard</h1>
+
+    <br/><br/>
+
+    <div class="row">
+        <div class="col-md-8">
+            <a href=monitoringSession >
+                <button type="button" class="btn btn-primary w-75 h-100">Monitor the QoS of a remote assistance</button>
+            </a>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-2">
+
+            <div class="text-center">
+
+                <div class="row">
+                    <img src="{{url_for('static', filename='img/Icon_Questionmark.png')}}" class="rounded mx-auto d-block"
+                         alt="About logo" style="width:70px;height:40px;">
+                </div>
+                <br/>
+                <div class="row">
+                    <button type="button" class="btn btn-secondary w-100">About 5G</button>
+                </div>
+                <br/>
+                <div class="row">
+                    <button type="button" class="btn btn-secondary w-100">About this NetApp</button>
+                </div>
+                <br/>
+                <div class="row">
+                    <button type="button" class="btn btn-secondary w-100">About Immersion</button>
+                </div>
+                <br/>
+            </div>
+        </div>
+       <div class="col-md-1"></div>
+    </div>
+
+    <br/>
+
+    <div class="row">
+        <div class="col-md-8">
+            <button type="button" class="btn btn-primary w-75">Quick test</button>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+
+
+
+</blockquote>
+{% endblock %}

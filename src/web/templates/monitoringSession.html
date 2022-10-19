@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %} IMM NetApp {% endblock %}
+
+{% block jsScripts %} <script type = "text/javascript" src="./js/monitoring_func.js"></script>   {% endblock %}
+
+{% block content %}
+<blockquote class="blockquote text-center">
+    <h1>Monitoring a QoS</h1>
+
+    <br/><br/>
+    <!--  First part: the summary of current network state  -->
+    <p class="fw-bold">Current state of the 5G network: </p>
+    <p class="fw-normal">None, please add a UE to monitor.</p>
+
+    <br/><br/>
+
+    <!--  Second part: the monitored UEs required by the vApp -->
+    <p class="fw-bold">UE monitoring based on vApp requests: </p>
+
+    <br/><br/><br/>
+
+    <p class="fw-bold">Manually added UE monitoring: </p>
+    <div class="row">
+        <div class="col-md-10">
+            <div class="container p-2 bg-secondary text-white">
+                <div class="row">
+                    <div class="col-md-1">
+                        <p class="fw-bold">UE </p>
+                        <input id="UE_num" type="text" class="form-control" placeholder="0" aria-label="UE_num" aria-describedby="basic-addon1">
+                    </div>
+                    <div class="col-md-2">
+                        <input id="ipv4" type="text" class="form-control" placeholder="IPv4 address" aria-label="IPv4" aria-describedby="basic-addon1">
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-check form-switch">
+                            <label class="form-check-label" for="switchLocationUE1">Loc</label>
+                            <input class="form-check-input" type="checkbox" role="switch" id="switchLocationUE1">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-check form-switch">
+                            <label class="form-check-label" for="switchQosUE1">QoS</label>
+                            <input class="form-check-input" type="checkbox" role="switch" id="switchQosUE1">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <p>Current QoS: Not started</p>
+                    </div>
+                    <div class="col-md-1">
+                        <a href=# id=playUE1>
+                            <img src="{{url_for('static', filename='img/Icon_Play.svg')}}" class="rounded mx-auto d-block"
+                                 alt="Play logo" style="width:28px;height:28px;">
+                        </a>
+                        <span id=result_play>?</span>
+                    </div>
+                    <div class="col-md-1">
+                        <img id=deleteUE1 src="{{url_for('static', filename='img/Icon_Delete_1.svg')}}" class="rounded mx-auto d-block"
+                             alt="Delete logo" style="width:28px;height:28px;">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-1">
+            <img src="{{url_for('static', filename='img/Icon_Logs.svg')}}" class="rounded mx-auto d-block"
+                 alt="Logs logo" style="width:28px;height:28px;">
+        </div>
+    </div>
+
+    <!--  Second row: can add a new UE line  -->
+    <div class="row">
+        <div class="col-md-1">
+            <div class="container p-2 bg-secondary text-white">
+                <img src="{{url_for('static', filename='img/Icon_Plus.svg')}}" class="rounded mx-auto d-block"
+                     alt="Logs logo" style="width:28px;height:28px;">
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+            $(function() {
+                $('a#playUE1').bind('click', function() {
+                $.getJSON($SCRIPT_ROOT + '/_start_ue_monitoring', {
+                    ue_num: $('input[name="ue_num"]').val(),
+                    ipv4: $('input[name="ipv4"]').val(),
+                    loc: $('input[name="switchLocationUE1"]').checked,
+                    qos: $('input[name="switchQosUE1"]').checked,
+                }, function(data) {
+                 $("#result_play").text(data.result);
+                 });
+                return false;
+                });
+            });
+    </script>
+
+    <p><a href="#" onClick="exampleFunction;">Click Me</a></p>
+
+
+    <br/><br/>
+
+</blockquote>
+{% endblock %}

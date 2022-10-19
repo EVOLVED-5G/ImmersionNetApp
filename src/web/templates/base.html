@@ -6,10 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
 
   <title>{% block title %} {% endblock %}</title>
+  {% block jsScripts %} {% endblock %}
+
 </head>
 
 <body>
@@ -23,10 +26,10 @@
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
         crossorigin="anonymous">
 </script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous">
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+            crossorigin="anonymous"></script>
+
 
   <!-- The main container for GUI elements -->
 <div class="container p-3 my-5 bg-dark text-white">
@@ -34,9 +37,9 @@
 
   <!-- The two logos at the bottom. Remember that with Flask the img should be in the "static" folder -->
   <br/><br/><br/><br/>
-  <img src="{{url_for('static', filename='img/Ev5G_Logo.png')}}" class="rounded float-left"
+  <img src="{{url_for('static', filename='img/Ev5G_Logo.png')}}" class="rounded float-start"
        alt="Evolved-5G logo" style="width:100px;height:50px;">
-  <img src="{{url_for('static', filename='img/Immersion_Logo2022.png')}}" class="rounded float-right"
+  <img src="{{url_for('static', filename='img/Immersion_Logo2022.png')}}" class="rounded float-end"
        alt="IMM logo" style="width:150px;height:50px;">
   <br/><br/>
 
