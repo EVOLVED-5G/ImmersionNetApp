@@ -1,0 +1,17 @@
+{
+  "serverForVApp": {
+    "ipv4": "0.0.0.0",
+    "port": 9877
+  },
+  "flask": {
+    "5G_port": 9999,
+    "web_port": 9998
+  },
+  "emulator": {
+    "localhost": "http://imm_netapp_container:",
+    "nef_host": "http://backend"
+  },
+  "netapp": {
+    "id": "myNetapp"
+  }
+}

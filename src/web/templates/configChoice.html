@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %} IMM NetApp {% endblock %}
+
+{% block content %}
+<blockquote class="blockquote text-center">
+    <h1>Select a configuration</h1>
+
+    <br/><br/>
+
+    <div class="row">
+        <!-- Selection of a configuration for the NetApp (ports, ip, and so on) -->
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action active" aria-current="true">IMM_local</a>
+                <a href="#" class="list-group-item list-group-item-action">IMM_Dockerized</a>
+                <a href="#" class="list-group-item list-group-item-action">Malaga</a>
+            </div>
+
+            <br/>
+
+            <!-- Two buttons: Create new config and Save current config -->
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="container p-2 bg-secondary text-white ">
+                        <a href="#"> <img src="{{url_for('static', filename='img/Icon_Plus.svg')}}" class="rounded mx-auto d-block"
+                                          alt="Add" style="width:24px;height:24px;"></a>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-5">
+                    <div class="container p-2 bg-secondary text-white ">
+                        <a href="#"> <img src="{{url_for('static', filename='img/Icon_Save_1.svg')}}" class="rounded mx-auto d-block"
+                                          alt="Save" style="width:24px;height:24px;"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- See the details of the currently selected config -->
+        <div class="col-md-9">
+            <textarea class="form-control" id="configText" rows="18" placeholder="Config"></textarea>
+        </div>
+
+    </div>
+
+    <br/><br/>
+
+    <!-- A button linking to another page. Set its width to XY% of the parent's width -->
+    <a href=monitoringSession ><button type="button" class="btn btn-primary w-25">Choose this config</button></a>
+
+    <br/><br/>
+
+    <!-- Script for clicks on a list element   -->
+    <script>
+            $(function() {
+                $(".list-group-item").bind('click', function(){
+                $('.active').removeClass('active');
+                $(this).addClass('active');
+                console.log($(this).html());
+
+                $.getJSON($SCRIPT_ROOT + '/_selected_config_changed', {
+                    config_name: $(this).text()
+                }, function(data) {
+                 $('#configText').val(data.result);
+                 });
+                return false;
+                });
+            });
+
+    </script>
+
+</blockquote>
+{% endblock %}

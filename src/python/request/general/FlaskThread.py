@@ -30,18 +30,19 @@ class FlaskThread(threading.Thread):
         # Change the path to both the templates and the static folders
         self.app = Flask(__name__, template_folder="../../../web/templates", static_folder='../../../web/static')
         self.request_handler = request_handler
-        config = ConfigUtils.read_config()
-        self.port = config.flask.port
-        self.endpointGenerator = EndPointGenerator(self.port)
-        self.webHandler = WebRequestHandler(self)
+        self.port = None
+        self.endpointGenerator = None
 
     def run(self):
+        # Read the config data and init the remaining objects that need it
+        config = ConfigUtils.read_config()
+        self.port = config.flask.port_5G
+        self.endpointGenerator = EndPointGenerator(self.port)
+
         # Start the Flask server in a dedicated thread to avoid being blocked here
         # Note: use "0.0.0.0" as host to make sure this Flask server will be reachable for the NEF emulator
         threading.Thread(target=lambda: self.app.run(host="0.0.0.0", port=self.port,
                                                      debug=False, use_reloader=False)).start()
-        # Add basic rules for GET methods
-        self.webHandler.init_get_rules()
 
         while not self.must_stop:
             # Blocking call, waiting until we are asked to create a route
@@ -61,10 +62,6 @@ class FlaskThread(threading.Thread):
         self.queue.put(ep)
         print("Will add rule for created 5GCore endpoint " + ep.complete_url)
         return ep.complete_url
-
-    def add_web_endpoint(self, url, func):
-        ep = self.endpointGenerator.create_web_endpoint(url, func)
-        self.queue.put(ep)
 
     def on_post_location_notif(self):
         notif_json = request.json

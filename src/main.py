@@ -1,3 +1,4 @@
+from python.MainController import MainController
 from python.network.threads.ServerThread import ServerThread
 from python.network.msg.MsgDispatcher import MsgDispatcher
 from python.request.general.RequestManager import RequestManager
@@ -7,9 +8,11 @@ import argparse
 def welcome():
     msg = "This is the IMM NetApp, version 2.1. This NetApp is built within the Evolved-5G european project."
     print(msg)
+    # Read command line arguments, including the selected configuration
     args = read_command_line_args()
+    # Write the chosen config into a text file to keep track of it
     print("Using the " + args.config + " config")
-    with open("./ConfigChoice.txt", "w") as f:
+    with open("config/ConfigChoice.txt", "w") as f:
         f.write(args.config)
 
 
@@ -23,27 +26,16 @@ def read_command_line_args():
 
 if __name__ == '__main__':
     welcome()
-
-    # Start the Tkinter GUI
-    # root = Tk()
-    # style = ttk.Style(root)
-    # root.tk.call('source', 'theme/breeze-dark/breeze-dark.tcl')
-    # style.theme_use('breeze-dark')
-    # Welcome(root)
-    # root.mainloop()
-
-    # Initialize all components in the correct order
-    msgDispatcher = MsgDispatcher()
-    serverThread = ServerThread(msgDispatcher)
-    request_manager = RequestManager(serverThread)
-    msgDispatcher.prepare_handlers(request_manager)
+    mainController = MainController()
+    mainController.start()
+    mainController.join()
 
     # Start the threads and test calls
-    msgDispatcher.start()
-    serverThread.start()
+    # msgDispatcher.start()
+    # serverThread.start()
 
-    request_manager.start_communications()
-    request_manager.test_nef_emulator_calls()
+    # request_manager.start_communications()
+    # request_manager.test_nef_emulator_calls()
 
 
 

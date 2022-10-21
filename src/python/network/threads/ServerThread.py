@@ -16,13 +16,17 @@ class ServerThread(PoliteThread):
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.numClient = 0
         self.client_handle = None
+        self.serv_addr = None
+        self.serv_port = None
+
+    def run(self):
         # Read the config to know which ip and port to use for the server
         config = ConfigUtils.read_config()
         self.serv_addr = config.serverForVApp.ipv4_addr
-        self.serv_port = config.serverForVApp.port
+        self.serv_port = config.serverForVApp.web_port
         self.sock.bind((self.serv_addr, self.serv_port))
 
-    def run(self):
+        # Wait for incoming connections
         while self.must_run:
             self.sock.listen()
             print("Server waiting for incoming client...")

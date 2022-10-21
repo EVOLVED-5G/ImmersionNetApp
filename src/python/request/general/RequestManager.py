@@ -9,12 +9,31 @@ from python.request.general.FlaskThread import FlaskThread
 # RequestManager
 # A class handling requests from the VApp and messages from/to the 5G Core.
 # It triggers the corresponding actions, like answering with dummy data or creating the corresponding 5G API calls
+from python.request.web.FlashWebServer import FlaskWebServer
+
+
 class RequestManager:
 
-    def __init__(self, server):
+    def __init__(self, server, controller_queue):
         self.server = server
+        self.controller_queue = controller_queue
         self.flask_thread = FlaskThread(self)
         self.core5GManager = Core5GRequester(self, self.flask_thread)
+        # Create and start immediately the web server to have access to the web GUI
+        self.web_flask = FlaskWebServer(self)
+        self.web_flask.start()
+
+    def start_communications_request(self):
+        from python.MainController import ControllerCMD
+        self.controller_queue.put(ControllerCMD.START_COMM)
+
+    def start_communications(self):
+        self.flask_thread.start()
+        # Mandatory call to get access token and create APIRequester instances
+        self.core5GManager.start_comm_with_emulator()
+        self.core5GManager.clean_subscriptions()
+        # If needed for debug purposes, trigger a few loc and Qos subscriptions
+        self.test_nef_emulator_calls()
 
     # Handle a QoS request from the vApp
     def handle_vapp_qos_request(self, msg, content_type):
@@ -39,12 +58,6 @@ class RequestManager:
             answer = MonitoringTriggerAnswer(MsgUtils.MsgType.ANSWER, content_type, MsgUtils.AnswerStatus.OK)
             self.server.add_msg_to_send(jsonpickle.encode(answer, unpicklable=False, make_refs=False))
 
-    def start_communications(self):
-        self.flask_thread.start()
-        # Mandatory call to get access token and create APIRequester instances
-        self.core5GManager.start_comm_with_emulator()
-        self.core5GManager.clean_subscriptions()
-
     def test_nef_emulator_calls(self):
         # Optional calls to showcase the different APIs
         self.core5GManager.track_ue_location(id_ue=10002)
@@ -54,6 +67,9 @@ class RequestManager:
 
     def notify_vapp(self, notif):
         self.server.add_msg_to_send(jsonpickle.encode(notif, unpicklable=False))
+
+    def polite_stop_children(self):
+        self.flask_thread.polite_stop()
 
 
 
