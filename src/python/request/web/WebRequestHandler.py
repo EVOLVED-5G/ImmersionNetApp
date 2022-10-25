@@ -14,6 +14,7 @@ def dashboard_page():
 def debug_page():
     return render_template('debug.html')
 
+
 def config_choice_page():
     return render_template('configChoice.html')
 

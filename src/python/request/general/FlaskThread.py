@@ -1,3 +1,4 @@
+import os
 import threading
 from queue import Queue
 import jsonpickle
@@ -34,9 +35,7 @@ class FlaskThread(threading.Thread):
         self.endpointGenerator = None
 
     def run(self):
-        # Read the config data and init the remaining objects that need it
-        config = ConfigUtils.read_config()
-        self.port = config.flask.port_5G
+        self.port = int(os.getenv('NETAPP_PORT_5G'))
         self.endpointGenerator = EndPointGenerator(self.port)
 
         # Start the Flask server in a dedicated thread to avoid being blocked here

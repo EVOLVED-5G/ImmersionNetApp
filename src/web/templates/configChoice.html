@@ -67,7 +67,17 @@
                 return false;
                 });
             });
+    </script>
 
+    <script>
+         $( document ).ready(function(){
+            $.getJSON($SCRIPT_ROOT + '/_selected_config_changed', {
+                    config_name: "IMM_local"
+                }, function(data) {
+                 $('#configText').val(data.result);
+                 });
+            return false;
+        });
     </script>
 
 </blockquote>

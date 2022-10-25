@@ -4,8 +4,8 @@
     "port": 9878
   },
   "flask": {
-    "5G_port": 9996,
-    "web_port": 9995
+    "5G_port": 9999,
+    "web_port": 9998
   },
   "emulator": {
     "localhost": "http://imm_netapp_container:",

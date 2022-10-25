@@ -1,3 +1,5 @@
+import os
+
 from python.emulator import Emulator_Utils
 from python.utils import ConfigUtils
 
@@ -8,6 +10,6 @@ class APIRequester:
         self.flask_thread = flask_th
         self.token = token
         self.host = Emulator_Utils.get_host_of_the_nef_emulator()
-        config = ConfigUtils.read_config()
-        self.netapp_id = config.netapp.id
+        self.netapp_id = os.getenv('NETAPP_ID')
+
 

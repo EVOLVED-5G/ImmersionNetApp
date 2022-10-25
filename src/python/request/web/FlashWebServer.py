@@ -1,3 +1,4 @@
+import os
 import threading
 from queue import Queue
 import jsonpickle
@@ -36,9 +37,7 @@ class FlaskWebServer(threading.Thread):
         self.webHandler = None
 
     def run(self):
-        # Read the config data and init the remaining objects that need it
-        config = ConfigUtils.read_config()
-        self.web_port = config.flask.port_web
+        self.web_port = int(os.getenv('NETAPP_PORT_WEB'))
         self.endpointGenerator = EndPointGenerator(self.web_port)
         self.webHandler = WebRequestHandler(self)
 

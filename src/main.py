@@ -1,7 +1,7 @@
+import os
+
 from python.MainController import MainController
-from python.network.threads.ServerThread import ServerThread
-from python.network.msg.MsgDispatcher import MsgDispatcher
-from python.request.general.RequestManager import RequestManager
+
 import argparse
 
 
@@ -10,10 +10,23 @@ def welcome():
     print(msg)
     # Read command line arguments, including the selected configuration
     args = read_command_line_args()
-    # Write the chosen config into a text file to keep track of it
+
+    # Print the chosen config, then set env variables if we run the NetApp locally for dev/debug purposes
     print("Using the " + args.config + " config")
-    with open("config/ConfigChoice.txt", "w") as f:
-        f.write(args.config)
+    if args.config == "default":
+        add_local_env_var()
+
+
+def add_local_env_var():
+    os.environ['NETAPP_NAME'] = "IMM_Netapp"
+    os.environ['NETAPP_ID'] = "imm_netapp"
+    os.environ['NETAPP_IP'] = "http://0.0.0.0:"
+    os.environ['NETAPP_SERVER_VAPP'] = "127.0.0.1"
+    os.environ['NETAPP_PORT_5G'] = "9999"
+    os.environ['NETAPP_PORT_WEB'] = "9998"
+    os.environ['NETAPP_PORT_VAPP'] = "9877"
+    os.environ['NEF_HOST'] = "http://localhost:8888"
+    os.environ['NEF_LOCALHOST'] = "http://host.docker.internal:"
 
 
 def read_command_line_args():
@@ -26,16 +39,11 @@ def read_command_line_args():
 
 if __name__ == '__main__':
     welcome()
+    # Let the MainController handle the rest
     mainController = MainController()
     mainController.start()
     mainController.join()
 
-    # Start the threads and test calls
-    # msgDispatcher.start()
-    # serverThread.start()
-
-    # request_manager.start_communications()
-    # request_manager.test_nef_emulator_calls()
 
 
 

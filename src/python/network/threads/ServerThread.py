@@ -1,3 +1,4 @@
+import os
 import socket
 
 from python.network.threads.HandleClientThread import HandleClientThread
@@ -20,10 +21,8 @@ class ServerThread(PoliteThread):
         self.serv_port = None
 
     def run(self):
-        # Read the config to know which ip and port to use for the server
-        config = ConfigUtils.read_config()
-        self.serv_addr = config.serverForVApp.ipv4_addr
-        self.serv_port = config.serverForVApp.web_port
+        self.serv_addr = os.getenv('NETAPP_SERVER_VAPP')
+        self.serv_port = int(os.getenv('NETAPP_PORT_VAPP'))
         self.sock.bind((self.serv_addr, self.serv_port))
 
         # Wait for incoming connections

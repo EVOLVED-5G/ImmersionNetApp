@@ -3,6 +3,13 @@ services:
  imm_netapp:
     image: imm_netapp
     container_name: imm_netapp
+    environment:
+        NETAPP_NAME = "${netapp_name}"
+        NETAPP_IP = "${netapp_ip}"
+        NEF_IP = "${nef_ip}"
+        NEF_HOST = "${nef_host}"
+        NEF_IP_DEV = "${nef_ip_dev}"
+        NEF_HOST_DEV = "${nef_host_dev}"
     build:
       context: ./src # For now, the python code of the NetApp is in this .src directory
     ports:
@@ -12,8 +19,5 @@ services:
       - "9998"
       - "9999"
       
-      # Should we use this instead since this version of the NetApp will be containerized anyway?
-      #- "9877"
-      #- "9999:8888"
 
 
