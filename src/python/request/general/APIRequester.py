@@ -1,7 +1,6 @@
 import os
 
 from python.emulator import Emulator_Utils
-from python.utils import ConfigUtils
 
 
 class APIRequester:

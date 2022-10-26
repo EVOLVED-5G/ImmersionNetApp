@@ -2,15 +2,10 @@ import os
 import threading
 from queue import Queue
 import jsonpickle
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify
 
-from python.network.msg import MsgUtils
 from python.request.endpoint.EndPointGenerator import EndPointGenerator
-from python.request.endpoint.EndpointUtils import EndpointType
-from python.request.location.LocationUtils import LocationVal, LocationNotif
-from python.request.qos.QosUtils import QosVal, QosNotif
 from python.request.web.WebRequestHandler import WebRequestHandler
-from python.utils import ConfigUtils
 
 
 def on_post_general_notif():

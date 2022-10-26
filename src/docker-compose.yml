@@ -1,8 +1,10 @@
 version: '3'
 services:
   imm_netapp:
+    # Name of the built image and of the future container
     image: imm_netapp_img
     container_name: imm_netapp_container
+    # List of environment variables
     environment:
       NETAPP_ID: "${netapp_id}"
       NETAPP_NAME: "${netapp_name}"
@@ -15,14 +17,17 @@ services:
       NEF_HOST: "${nef_host}"
 
     build:
+    # Path to the src code
       context: ./ 
     ports:
       # If port mapping is needed, left is host side and right is container side according to https://docs.docker.com/compose/compose-file/#ports
+      # Be careful: if no mapping is specified, Docker will use a random available port on container side!
       - "9876:9876"
       - "9877:9877"
       - "9998:9998"
       - "9999:9999"
-      
+
+# We need to create a network bridge with nef_emulator_default to be able to reach the NEF emulator
 networks:
   default:
     name: nef_emulator_default

@@ -47,8 +47,5 @@ class CustomEndpoint:
         self.func = func
         # Read the config file to get the first part of the endpoint url
         self.complete_url = os.getenv('NEF_EMULATOR_LOCALHOST') + str(flask_port) + self.url_rule
-        print(self.complete_url)
-        # config = ConfigUtils.read_config()
-        # self.complete_url = config.emulator.localhost + str(flask_port) + self.url_rule
 
 

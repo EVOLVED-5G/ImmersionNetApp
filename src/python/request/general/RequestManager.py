@@ -1,6 +1,7 @@
 import jsonpickle
 from python.emulator.MonitoringUtils import MonitoringTriggerAnswer
 from python.network.msg import MsgUtils
+from python.request.general.UEsController import UEsController
 from python.request.qos.QoSMsg import QosMsg
 from python.request.general.Core5GRequester import Core5GRequester
 from python.request.general.FlaskThread import FlaskThread
@@ -8,7 +9,7 @@ from python.request.general.FlaskThread import FlaskThread
 
 # RequestManager
 # A class handling requests from the VApp and messages from/to the 5G Core.
-# It triggers the corresponding actions, like answering with dummy data or creating the corresponding 5G API calls
+# It triggers the corresponding actions, like creating the corresponding 5G API calls
 from python.request.web.FlashWebServer import FlaskWebServer
 
 
@@ -19,6 +20,8 @@ class RequestManager:
         self.controller_queue = controller_queue
         self.flask_thread = FlaskThread(self)
         self.core5GManager = Core5GRequester(self, self.flask_thread)
+        self.ue_controller = UEsController(self)
+
         # Create and start immediately the web server to have access to the web GUI
         self.web_flask = FlaskWebServer(self)
         self.web_flask.start()
@@ -64,6 +67,9 @@ class RequestManager:
         self.core5GManager.start_gbr_monitoring(ue_ipv4="10.0.0.2")
         self.core5GManager.track_ue_location(id_ue=10004)
         self.core5GManager.start_gbr_monitoring(ue_ipv4="10.0.0.4")
+        # Record the fact that we now monitor both UEs
+        self.ue_controller.add_monitored_ue("10.0.0.2", True, True)
+        self.ue_controller.add_monitored_ue("10.0.0.4", True, True)
 
     def notify_vapp(self, notif):
         self.server.add_msg_to_send(jsonpickle.encode(notif, unpicklable=False))
