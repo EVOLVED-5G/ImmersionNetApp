@@ -27,9 +27,7 @@ services:
       - "9998:9998"
       - "9999:9999"
 
-# We need to create a network bridge with nef_emulator_default to be able to reach the NEF emulator
+# We need to create a network bridge with nef_emulator_default to be able to reach the NEF emulator 
 networks:
-  default:
-    name: nef_emulator_default
+  nef_emulator_default:
     external: true
-      
