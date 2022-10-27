@@ -44,7 +44,3 @@ if __name__ == '__main__':
     mainController = MainController()
     mainController.start()
     mainController.join()
-
-
-
-
