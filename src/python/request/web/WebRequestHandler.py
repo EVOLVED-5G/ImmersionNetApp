@@ -60,6 +60,8 @@ class WebRequestHandler:
         self.flask.add_web_endpoint(url='/_start_ue_monitoring', func=start_ue_monitoring)
         self.flask.add_web_endpoint(url='/_stop_ue_monitoring', func=stop_ue_monitoring)
         self.flask.add_web_endpoint(url='/_selected_config_changed', func=self.on_selected_config_changed)
+        self.flask.add_web_endpoint(url="/_get_monitored_ues", func=self.on_get_monitored_ues)
+        self.flask.add_web_endpoint(url="/_add_test_ues", func=self.on_adding_test_ues)
 
     def monitoring_session_page(self):
         self.flask.start_session_requested()
@@ -77,4 +79,11 @@ class WebRequestHandler:
             filename = "IMM_local.json"
         # Return the content of the corresponding config file
         return jsonify(result=self.config_reader.get_config_text(config_name))
+
+    def on_get_monitored_ues(self):
+        return jsonify(result=self.flask.get_monitored_ues())
+
+    def on_adding_test_ues(self):
+        print("Adding test ues...")
+        return jsonify(result=self.flask.add_test_ues())
 

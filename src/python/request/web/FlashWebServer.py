@@ -55,5 +55,11 @@ class FlaskWebServer(threading.Thread):
     def start_session_requested(self):
         self.request_handler.start_communications_request()
 
+    def get_monitored_ues(self):
+        return self.request_handler.get_monitored_ues()
+
+    def add_test_ues(self):
+        return self.request_handler.test_nef_emulator_calls()
+
     def polite_stop(self):
         self.must_stop = True

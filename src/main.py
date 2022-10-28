@@ -27,7 +27,7 @@ def add_local_env_var():
     os.environ['NETAPP_PORT_WEB'] = "9998"
     os.environ['NETAPP_PORT_VAPP'] = "9877"
     os.environ['NEF_HOST'] = "http://localhost:8888"
-    os.environ['NEF_EMULATOR_LOCALHOST'] = "http://host.docker.internal:"
+    os.environ['NEF_CALLBACK_URL'] = "http://host.docker.internal:"
 
 
 def read_command_line_args():

@@ -36,7 +36,7 @@ class RequestManager:
         self.core5GManager.start_comm_with_emulator()
         self.core5GManager.clean_subscriptions()
         # If needed for debug purposes, trigger a few loc and Qos subscriptions
-        self.test_nef_emulator_calls()
+        # self.test_nef_emulator_calls()
 
     # Handle a QoS request from the vApp
     def handle_vapp_qos_request(self, msg, content_type):
@@ -70,9 +70,13 @@ class RequestManager:
         # Record the fact that we now monitor both UEs
         self.ue_controller.add_monitored_ue("10.0.0.2", True, True)
         self.ue_controller.add_monitored_ue("10.0.0.4", True, True)
+        return self.ue_controller.get_monitored_ues()
 
     def notify_vapp(self, notif):
         self.server.add_msg_to_send(jsonpickle.encode(notif, unpicklable=False))
+
+    def get_monitored_ues(self):
+        return self.ue_controller.get_monitored_ues()
 
     def polite_stop_children(self):
         self.flask_thread.polite_stop()

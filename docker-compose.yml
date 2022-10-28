@@ -13,7 +13,7 @@ services:
       NETAPP_PORT_5G: "${netapp_port_5g}"
       NETAPP_PORT_WEB: "${netapp_port_web}"
       NETAPP_PORT_VAPP: "${netapp_port_vapp}"
-      NEF_EMULATOR_LOCALHOST: "${nef_emulator_localhost}"
+      NEF_CALLBACK_URL: "${nef_callback_url}"
       NEF_HOST: "${nef_host}"
 
     build:
@@ -28,6 +28,13 @@ services:
       - "9999:9999"
 
 # We need to create a network bridge with nef_emulator_default to be able to reach the NEF emulator 
+# This works
 networks:
-  nef_emulator_default:
+  default:
+    name: nef_emulator_default
     external: true
+
+# This does not work 
+#networks:
+#  nef_emulator_default:
+#    external: true
