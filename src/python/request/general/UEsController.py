@@ -50,7 +50,9 @@ class UEsController:
 
         else:
             for ue in self.monitored_ues.values():
-                result += ue.str_summary() + "\n"
+                # Add each ue summary one by one, separated by a special character
+                # This special character will be replace by an '\n' in the js function
+                result += ue.str_summary() + "&"
 
         return result
 

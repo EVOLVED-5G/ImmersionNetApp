@@ -1,6 +1,8 @@
 from flask import render_template, request, jsonify
-
 from python.utils.ConfigUtils import ConfigReader
+import requests
+import time
+import flask
 
 
 def home_page():
@@ -26,19 +28,10 @@ def add_numbers():
     return jsonify(result=a + b)
 
 
-def start_ue_monitoring():
-    ue_num = request.args.get('ue_num', '1', type=int)
-    ipv4 = request.args.get('ipv4', '10.0.0.1', type=str)
-    monitor_loc = request.args.get('loc', 'true', type=bool)
-    monitor_qos = request.args.get('qos', 'true', type=bool)
-    print('Receiving a Web request to manually start monitoring UE', ue_num)
-    return jsonify(result='Ok')
-
-
-def stop_ue_monitoring():
-    ue_num = request.args.get('ue_num', '1', type=int)
-    print('Receiving a Web request to manually stop monitoring UE', ue_num)
-    return jsonify(result='Done')
+def get_message():
+    time.sleep(1.0)
+    s = time.ctime(time.time())
+    return s
 
 
 class WebRequestHandler:
@@ -57,11 +50,12 @@ class WebRequestHandler:
 
         # Then, add rules related to function calls
         self.flask.add_web_endpoint(url='/_add_numbers', func=add_numbers)
-        self.flask.add_web_endpoint(url='/_start_ue_monitoring', func=start_ue_monitoring)
-        self.flask.add_web_endpoint(url='/_stop_ue_monitoring', func=stop_ue_monitoring)
+        self.flask.add_web_endpoint(url='/_start_ue_monitoring', func=self.start_ue_monitoring)
+        self.flask.add_web_endpoint(url='/_stop_ue_monitoring', func=self.stop_ue_monitoring)
         self.flask.add_web_endpoint(url='/_selected_config_changed', func=self.on_selected_config_changed)
         self.flask.add_web_endpoint(url="/_get_monitored_ues", func=self.on_get_monitored_ues)
         self.flask.add_web_endpoint(url="/_add_test_ues", func=self.on_adding_test_ues)
+        self.flask.add_web_endpoint(url="/stream", func=self.stream)
 
     def monitoring_session_page(self):
         self.flask.start_session_requested()
@@ -83,8 +77,34 @@ class WebRequestHandler:
     def on_get_monitored_ues(self):
         return jsonify(result=self.flask.get_monitored_ues())
 
+    # Same than before, but return the raw string instead of building json from it
+    def on_get_raw_monitored_ues(self):
+        time.sleep(2.0)
+        return self.flask.get_monitored_ues()
+
     def on_adding_test_ues(self):
         print("Adding test ues...")
         res = self.flask.add_test_ues()
         return jsonify(result_type=res["res_type"], ues=res["ues"])
 
+    def start_ue_monitoring(self):
+        ipv4 = request.args.get('ipv4', type=str)
+        monitor_loc = request.args.get('loc')
+        monitor_qos = request.args.get('qos')
+        print('Receiving a Web request to manually start monitoring UE ', ipv4, " Monitoring_loc: ", monitor_loc)
+        res = self.flask.add_or_update_ue_monitoring(ipv4, monitor_loc, monitor_qos)
+        return jsonify(result_type=res["res_type"], ues=res["ues"])
+
+    def stop_ue_monitoring(self):
+        ue_num = request.args.get('ue_num', '1', type=int)
+        print('Receiving a Web request to manually stop monitoring UE', ue_num)
+        return jsonify(result='Done')
+
+    def stream(self):
+        def eventStream():
+            while True:
+                # wait for source data to be available, then push it
+                report = 'data: {}\n\n'.format(self.on_get_raw_monitored_ues())
+                yield report
+
+        return flask.Response(eventStream(), mimetype="text/event-stream")

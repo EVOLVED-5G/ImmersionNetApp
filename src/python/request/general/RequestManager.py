@@ -5,6 +5,8 @@ from python.request.general.UEsController import UEsController
 from python.request.qos.QoSMsg import QosMsg
 from python.request.general.Core5GRequester import Core5GRequester
 from python.request.general.FlaskThread import FlaskThread
+import threading
+import time
 
 
 # RequestManager
@@ -38,6 +40,7 @@ class RequestManager:
         self.core5GManager.clean_subscriptions()
         # If needed for debug purposes, trigger a few loc and Qos subscriptions
         # self.test_nef_emulator_calls()
+
 
     # Handle a QoS request from the vApp
     def handle_vapp_qos_request(self, msg, content_type):
@@ -77,6 +80,21 @@ class RequestManager:
             res_type = ActionResult.WARNING
 
         # In the end, return the description of currently monitored UEs
+        res = {"res_type": res_type, "ues": self.ue_controller.get_monitored_ues()}
+        return res
+
+    def add_or_update_ue_monitoring(self, ipv4, use_loc, use_qos):
+        already_exist = self.ue_controller.add_monitored_ue(ipv4, use_loc, use_qos)
+        res_type = ActionResult.SUCCESS
+
+        if already_exist:
+            res_type = ActionResult.WARNING
+        else:
+            if use_loc:
+                self.core5GManager.track_ue_location(id_ue=ipv4.replace(".", ""))
+            if use_qos:
+                self.core5GManager.start_gbr_monitoring(ue_ipv4=ipv4)
+
         res = {"res_type": res_type, "ues": self.ue_controller.get_monitored_ues()}
         return res
 

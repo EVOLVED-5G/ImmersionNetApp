@@ -61,5 +61,8 @@ class FlaskWebServer(threading.Thread):
     def add_test_ues(self):
         return self.request_handler.test_nef_emulator_calls()
 
+    def add_or_update_ue_monitoring(self, ipv4, use_loc, use_qos):
+        return self.request_handler.add_or_update_ue_monitoring(ipv4, use_loc, use_qos)
+
     def polite_stop(self):
         self.must_stop = True
