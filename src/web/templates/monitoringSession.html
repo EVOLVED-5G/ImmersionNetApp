@@ -13,6 +13,41 @@
 
     <br/><br/>
 
+    <!-- Container for notification messages (toasts) -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <!--  First possible toast: success  -->
+        <div id="toastSuccess" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Successfully added two monitored UEs.
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+
+        <!-- Warning toast -->
+        <div id="toastWarning" class="toast align-items-center text-bg-warning border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Warning: at least one requested UE was already monitored.
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+
+        <!-- Error toast -->
+        <div id="toastError" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Error: could not perform action.
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <br/>
+
     <!--  Second part: the monitored UEs -->
     <p class="fw-bold">Monitored UEs: </p>
 
@@ -115,12 +150,16 @@
                 $("a#quickTestBtn").bind('click', function(){
                 $.getJSON($SCRIPT_ROOT + '/_add_test_ues', {
                 }, function(data) {
-                 $('#monitoredUEsText').val(data.result);
+                 $('#monitoredUEsText').val(data.ues);
+                 const selectedToast = document.getElementById(data.result_type)
+                 const toast = new bootstrap.Toast(selectedToast)
+                 toast.show()
                  });
                 return false;
                 });
             });
     </script>
+
 
 
     <br/><br/>

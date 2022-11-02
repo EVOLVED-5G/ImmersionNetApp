@@ -85,5 +85,6 @@ class WebRequestHandler:
 
     def on_adding_test_ues(self):
         print("Adding test ues...")
-        return jsonify(result=self.flask.add_test_ues())
+        res = self.flask.add_test_ues()
+        return jsonify(result_type=res["res_type"], ues=res["ues"])
 

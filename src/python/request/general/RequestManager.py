@@ -11,6 +11,7 @@ from python.request.general.FlaskThread import FlaskThread
 # A class handling requests from the VApp and messages from/to the 5G Core.
 # It triggers the corresponding actions, like creating the corresponding 5G API calls
 from python.request.web.FlashWebServer import FlaskWebServer
+from python.utils.WebUtils import ActionResult
 
 
 class RequestManager:
@@ -53,24 +54,31 @@ class RequestManager:
             # Extract monitoring parameters if required
             content = msg.monitoring_params['toggleMonitoring']
             # Start both UE location and QoS monitoring
-            self.core5GManager.track_ue_location(id_ue=10002)
-            self.core5GManager.track_ue_location(id_ue=10004)
-            self.core5GManager.start_gbr_monitoring(ue_ipv4="10.0.0.2")
-            self.core5GManager.start_gbr_monitoring(ue_ipv4="10.0.0.4")
+            res = self.test_nef_emulator_calls()
             # Inform the vApp that we accepted the monitoring request
             answer = MonitoringTriggerAnswer(MsgUtils.MsgType.ANSWER, content_type, MsgUtils.AnswerStatus.OK)
             self.server.add_msg_to_send(jsonpickle.encode(answer, unpicklable=False, make_refs=False))
 
     def test_nef_emulator_calls(self):
-        # Optional calls to showcase the different APIs
-        self.core5GManager.track_ue_location(id_ue=10002)
-        self.core5GManager.start_gbr_monitoring(ue_ipv4="10.0.0.2")
-        self.core5GManager.track_ue_location(id_ue=10004)
-        self.core5GManager.start_gbr_monitoring(ue_ipv4="10.0.0.4")
-        # Record the fact that we now monitor both UEs
-        self.ue_controller.add_monitored_ue("10.0.0.2", True, True)
-        self.ue_controller.add_monitored_ue("10.0.0.4", True, True)
-        return self.ue_controller.get_monitored_ues()
+        # Optional calls to showcase the different APIs. Try to monitor two UEs.
+        # Each time, check if the monitored UE already exists or not
+        already_exist_1 = self.ue_controller.add_monitored_ue("10.0.0.2", True, True)
+        if not already_exist_1:
+            self.core5GManager.track_ue_location(id_ue=10002)
+            self.core5GManager.start_gbr_monitoring(ue_ipv4="10.0.0.2")
+
+        already_exist_2 = self.ue_controller.add_monitored_ue("10.0.0.4", True, True)
+        if not already_exist_2:
+            self.core5GManager.track_ue_location(id_ue=10004)
+            self.core5GManager.start_gbr_monitoring(ue_ipv4="10.0.0.4")
+
+        res_type = ActionResult.SUCCESS
+        if already_exist_1 and already_exist_2:
+            res_type = ActionResult.WARNING
+
+        # In the end, return the description of currently monitored UEs
+        res = {"res_type": res_type, "ues": self.ue_controller.get_monitored_ues()}
+        return res
 
     def notify_vapp(self, notif):
         self.server.add_msg_to_send(jsonpickle.encode(notif, unpicklable=False))

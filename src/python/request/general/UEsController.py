@@ -8,9 +8,13 @@ class UEsController:
         self.request_manager = request_manager
 
     def add_monitored_ue(self, ipv4, use_loc, use_qos):
-        # Update the dictionary of UEs (maj existing or add a new one)
+        # Update the dictionary of UEs (add a new one or update existing one)
         ue = MonitoredUE(ipv4, use_loc, use_qos, NetworkStatus.AS_REQUESTED)
+        already_exist = False
+        if ipv4 in self.monitored_ues:
+            already_exist = True
         self.monitored_ues.update({ipv4: ue})
+        return already_exist
 
     def update_ue_loc(self, ipv4, use_loc):
         # Id it does not exist, add the UE

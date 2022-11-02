@@ -18,7 +18,6 @@ class LocationRequester(APIRequester):
         expire_time = (datetime.datetime.utcnow() + datetime.timedelta(hours=expire_delay)).isoformat() + "Z"
         # To find external ids -> go to the online emulator map and click on a User icon
         external_id = str(id_ue) + "@domain.com"
-        # endpoint = self.endpoint_gen.create_ue_location_endpoint()
         subscription = self.location_subscriber.create_subscription(
             netapp_id=self.netapp_id,
             external_id=external_id,
