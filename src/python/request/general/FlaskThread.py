@@ -63,11 +63,12 @@ class FlaskThread(threading.Thread):
     def on_post_location_notif(self):
         notif_json = request.json
         print('Location POST received: ' + jsonpickle.dumps(notif_json))
-        # Extract data from the json msg and use it to send a notification to the vApp
+        # Extract data from the json msg
         loc_info = notif_json['locationInfo']
         loc_val = LocationVal(notif_json['ipv4Addr'], loc_info['cellId'], loc_info['enodeBId'])
-        self.request_handler.notify_vapp(LocationNotif(MsgUtils.MsgType.NOTIF, MsgUtils.ContentType.TYPE_LOCATION_NOTIF,
-                                                       MsgUtils.AnswerStatus.OK, loc_val))
+        # Let the handler update our monitored UEs and notify the vApp
+        self.request_handler.post_loc_received(loc_val)
+
         resp = jsonify(success=True)
         resp.status_code = 200
         return resp

@@ -2,6 +2,7 @@ import jsonpickle
 from python.emulator.MonitoringUtils import MonitoringTriggerAnswer
 from python.network.msg import MsgUtils
 from python.request.general.UEsController import UEsController
+from python.request.location.LocationUtils import LocationNotif
 from python.request.qos.QoSMsg import QosMsg
 from python.request.general.Core5GRequester import Core5GRequester
 from python.request.general.FlaskThread import FlaskThread
@@ -40,7 +41,6 @@ class RequestManager:
         self.core5GManager.clean_subscriptions()
         # If needed for debug purposes, trigger a few loc and Qos subscriptions
         # self.test_nef_emulator_calls()
-
 
     # Handle a QoS request from the vApp
     def handle_vapp_qos_request(self, msg, content_type):
@@ -97,6 +97,16 @@ class RequestManager:
 
         res = {"res_type": res_type, "ues": self.ue_controller.get_monitored_ues()}
         return res
+
+    def post_loc_received(self, loc_info):
+        # Update our monitored UEs list
+        self.ue_controller.update_ue_loc(ipv4=loc_info.ue_id, use_loc=True, loc_info=loc_info)
+
+        # Send a notification to the vApp
+        self.notify_vapp(LocationNotif(MsgUtils.MsgType.NOTIF, MsgUtils.ContentType.TYPE_LOCATION_NOTIF,
+                                       MsgUtils.AnswerStatus.OK, loc_info))
+
+
 
     def notify_vapp(self, notif):
         self.server.add_msg_to_send(jsonpickle.encode(notif, unpicklable=False))
