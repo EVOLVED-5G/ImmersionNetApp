@@ -89,8 +89,8 @@ class WebRequestHandler:
 
     def start_ue_monitoring(self):
         ipv4 = request.args.get('ipv4', type=str)
-        monitor_loc = request.args.get('loc')
-        monitor_qos = request.args.get('qos')
+        monitor_loc = request.args.get('loc', type=bool)
+        monitor_qos = request.args.get('qos', type=bool)
         print('Receiving a Web request to manually start monitoring UE ', ipv4, " Monitoring_loc: ", monitor_loc)
         res = self.flask.add_or_update_ue_monitoring(ipv4, monitor_loc, monitor_qos)
         return jsonify(result_type=res["res_type"], ues=res["ues"])

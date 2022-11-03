@@ -20,7 +20,7 @@ def read_config():
 class ConfigReader:
 
     def __init__(self):
-        #self.baseConfig = read_config()
+        # self.baseConfig = read_config()
         self.existing_configs = ["IMM_local", "IMM_Dockerized", "Malaga"]
 
     def get_config_text(self, filename):

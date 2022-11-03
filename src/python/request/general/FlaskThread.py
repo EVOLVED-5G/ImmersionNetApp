@@ -62,7 +62,7 @@ class FlaskThread(threading.Thread):
 
     def on_post_location_notif(self):
         notif_json = request.json
-        print('POST request received: ' + jsonpickle.dumps(notif_json))
+        print('Location POST received: ' + jsonpickle.dumps(notif_json))
         # Extract data from the json msg and use it to send a notification to the vApp
         loc_info = notif_json['locationInfo']
         loc_val = LocationVal(notif_json['ipv4Addr'], loc_info['cellId'], loc_info['enodeBId'])
@@ -74,7 +74,7 @@ class FlaskThread(threading.Thread):
 
     def on_post_qos_notif(self):
         notif_json = request.json
-        print('POST request received: ' + jsonpickle.dumps(notif_json))
+        print('QoS POST received: ' + jsonpickle.dumps(notif_json))
         # Extract data from the json msg and use it to send a notification to the vApp
         report_info = notif_json['eventReports']
         qos_val = QosVal(notif_json['ipv4Addr'], report_info[0]['event'])

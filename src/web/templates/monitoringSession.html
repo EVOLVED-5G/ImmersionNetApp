@@ -74,13 +74,13 @@
             <div class="col-2">
                 <div class="form-check form-switch">
                     <label class="form-check-label">Loc</label>
-                    <input class="form-check-input" type="checkbox" role="switch" name="switchLocationUE1">
+                    <input name="switchLocationUE1" class="form-check-input" type="checkbox" role="switch" checked>
                 </div>
             </div>
             <div class="col-2">
                 <div class="form-check form-switch">
                     <label class="form-check-label">QoS</label>
-                    <input class="form-check-input" type="checkbox" role="switch" name="switchQosUE1">
+                    <input name="switchQosUE1" class="form-check-input" type="checkbox" role="switch" checked>
                 </div>
             </div>
             <div class="col">
@@ -121,8 +121,8 @@
                 $('a#manuallyAddUE').bind('click', function() {
                 $.getJSON($SCRIPT_ROOT + '/_start_ue_monitoring', {
                     ipv4: $('input[name="ipv4"]').val(),
-                    loc: $('input[name="switchLocationUE1"]').checked,
-                    qos: $('input[name="switchQosUE1"]').checked,
+                    loc: $('input[name="switchLocationUE1"]').is(":checked"),
+                    qos: $('input[name="switchQosUE1"]').is(":checked"),
                 }, function(data) {
 
                 var ues = data.ues.replace(/\&/g, '\n');
