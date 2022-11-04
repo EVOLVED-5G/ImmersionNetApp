@@ -9,7 +9,7 @@ from python.request.general.FlaskThread import FlaskThread
 import threading
 import time
 
-
+from python.request.qos.QosUtils import QosNotif
 # RequestManager
 # A class handling requests from the VApp and messages from/to the 5G Core.
 # It triggers the corresponding actions, like creating the corresponding 5G API calls
@@ -106,7 +106,10 @@ class RequestManager:
         self.notify_vapp(LocationNotif(MsgUtils.MsgType.NOTIF, MsgUtils.ContentType.TYPE_LOCATION_NOTIF,
                                        MsgUtils.AnswerStatus.OK, loc_info))
 
-
+    def post_qos_received(self, qos_info):
+        self.ue_controller.update_ue_qos(ipv4=qos_info.ue_id, use_qos=True, qos_info=qos_info)
+        self.notify_vapp(QosNotif(MsgUtils.MsgType.NOTIF, MsgUtils.ContentType.TYPE_LOCATION_NOTIF,
+                                  MsgUtils.AnswerStatus.OK, qos_info))
 
     def notify_vapp(self, notif):
         self.server.add_msg_to_send(jsonpickle.encode(notif, unpicklable=False))

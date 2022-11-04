@@ -76,11 +76,10 @@ class FlaskThread(threading.Thread):
     def on_post_qos_notif(self):
         notif_json = request.json
         print('QoS POST received: ' + jsonpickle.dumps(notif_json))
-        # Extract data from the json msg and use it to send a notification to the vApp
+        # Extract data from the json msg
         report_info = notif_json['eventReports']
         qos_val = QosVal(notif_json['ipv4Addr'], report_info[0]['event'])
-        self.request_handler.notify_vapp(QosNotif(MsgUtils.MsgType.NOTIF, MsgUtils.ContentType.TYPE_LOCATION_NOTIF,
-                                                  MsgUtils.AnswerStatus.OK, qos_val))
+        self.request_handler.post_qos_received(qos_val)
         resp = jsonify(success=True)
         resp.status_code = 200
         return resp
