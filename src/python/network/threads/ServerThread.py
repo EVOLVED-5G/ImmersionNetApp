@@ -23,16 +23,18 @@ class ServerThread(PoliteThread):
     def run(self):
         self.serv_addr = os.getenv('NETAPP_SERVER_VAPP')
         self.serv_port = int(os.getenv('NETAPP_PORT_VAPP'))
-        self.sock.bind((self.serv_addr, self.serv_port))
+        self.sock.bind(('0.0.0.0', self.serv_port))
 
         # Wait for incoming connections
         while self.must_run:
             self.sock.listen()
-            print("Server waiting for incoming client...")
+            print("vApp server waiting for incoming client...")
             client_socket = self.sock.accept()[0]
             self.client_handle = HandleClientThread(client_socket, self.msg_dispatcher)
             self.client_handle.start()
             print("Client_" + str(self.numClient) + " accepted and handheld in a dedicated thread")
+            print(client_socket)
+            print(client_socket.getpeername())
             self.numClient += 1
 
         # At the end, properly close my client handler
