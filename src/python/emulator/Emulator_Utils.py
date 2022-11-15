@@ -1,7 +1,7 @@
 import os
 
 from evolved5g import swagger_client
-from evolved5g.swagger_client import LoginApi
+from evolved5g.swagger_client import LoginApi, Configuration, ApiClient
 from evolved5g.swagger_client.models import Token
 
 from python.utils import ConfigUtils
@@ -35,6 +35,20 @@ def get_api_client(token) -> swagger_client.ApiClient:
     configuration.access_token = token.access_token
     api_client = swagger_client.ApiClient(configuration=configuration)
     return api_client
+
+
+def get_token_with_capif() -> Token:
+    nef_url = "http://{}:{}".format(os.getenv('NEF_HOST'), os.getenv('NEF_PORT'))
+    nef_user = os.getenv('NEF_USER')
+    nef_pass = os.getenv('NEF_PASS')
+
+    configuration = Configuration()
+    configuration.host = nef_url
+    api_client = ApiClient(configuration=configuration)
+    api_client.select_header_content_type(["application/x-www-form-urlencoded"])
+    api = LoginApi(api_client)
+    token = api.login_access_token_api_v1_login_access_token_post("", nef_user, nef_pass, "", "", "")
+    return token
 
 
 def get_host_of_the_nef_emulator() -> str:

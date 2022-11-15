@@ -15,6 +15,8 @@ services:
       NETAPP_PORT_VAPP: "${netapp_port_vapp}"
       NEF_CALLBACK_URL: "${nef_callback_url}"
       NEF_HOST: "${nef_host}"
+      NEF_USER: "${nef_user}"
+      NEF_PASS: "${nef_pass}"
       CAPIF_HOST: "${capif_host}"
       CAPIF_HTTP_PORT: "${capif_http_port}"
       CAPIF_HTTPS_PORT: "${capif_https_port}"

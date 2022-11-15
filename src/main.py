@@ -21,6 +21,7 @@ def welcome():
 
 # Call me only when working locally for dev/debug
 def add_local_env_var():
+    # Env variables related to NetApp and vApp
     os.environ['NETAPP_NAME'] = "IMM_Netapp"
     os.environ['NETAPP_ID'] = "imm_netapp"
     os.environ['NETAPP_IP'] = "http://0.0.0.0:"
@@ -28,10 +29,12 @@ def add_local_env_var():
     os.environ['NETAPP_PORT_5G'] = "9999"
     os.environ['NETAPP_PORT_WEB'] = "9998"
     os.environ['NETAPP_PORT_VAPP'] = "9877"
+    # Env variables related to NEF
     os.environ['NEF_HOST'] = "http://localhost:8888"
     os.environ['NEF_CALLBACK_URL'] = "http://host.docker.internal:"
     os.environ['NEF_USER'] = "admin@my-email.com"
     os.environ['NEF_PASS'] = "pass"
+    # Env variables related to Capif
     os.environ['CAPIF_HOST'] = "127.0.0.1"
     os.environ['CAPIF_HTTP_PORT'] = "8080"
     os.environ['CAPIF_HTTPS_PORT'] = "443"
