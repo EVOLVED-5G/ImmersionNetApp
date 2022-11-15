@@ -15,6 +15,10 @@ services:
       NETAPP_PORT_VAPP: "${netapp_port_vapp}"
       NEF_CALLBACK_URL: "${nef_callback_url}"
       NEF_HOST: "${nef_host}"
+      CAPIF_HOST: "${capif_host}"
+      CAPIF_HTTP_PORT: "${capif_http_port}"
+      CAPIF_HTTPS_PORT: "${capif_https_port}"
+      PATH_TO_CERTS: "${path_to_certs}"
 
     build:
     # Path to the src code
@@ -31,7 +35,7 @@ services:
 # This works
 networks:
   default:
-    name: nef_emulator_default
+    name: nef_emulator_services_default
     external: true
 
 # This does not work 

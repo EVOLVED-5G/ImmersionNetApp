@@ -17,8 +17,8 @@ class EmulatorAccessToken:
 def get_token() -> Token:
     # User name and pass matches are set in the .env of the docker of NEF_EMULATOR. See
     # https://github.com/EVOLVED-5G/NEF_emulator
-    username = "admin@my-email.com"
-    password = "pass"
+    username = os.getenv('NEF_USER')
+    password = os.getenv('NEF_PASS')
     configuration = swagger_client.Configuration()
     # The host of the 5G API (emulator)
     configuration.host = get_host_of_the_nef_emulator()

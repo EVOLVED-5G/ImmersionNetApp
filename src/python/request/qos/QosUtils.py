@@ -30,6 +30,6 @@ class QosVal:
     def to_display_string(self):
         if self.is_qos_guaranteed:
             return "QOS guaranteed for UE " + str(self.ue_id)
-        return "QOS can NOT be guaranteed for UE for now" + str(self.ue_id)
+        return "QOS can NOT be guaranteed for UE " + str(self.ue_id) + " for now"
 
 

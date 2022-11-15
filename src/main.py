@@ -30,6 +30,12 @@ def add_local_env_var():
     os.environ['NETAPP_PORT_VAPP'] = "9877"
     os.environ['NEF_HOST'] = "http://localhost:8888"
     os.environ['NEF_CALLBACK_URL'] = "http://host.docker.internal:"
+    os.environ['NEF_USER'] = "admin@my-email.com"
+    os.environ['NEF_PASS'] = "pass"
+    os.environ['CAPIF_HOST'] = "127.0.0.1"
+    os.environ['CAPIF_HTTP_PORT'] = "8080"
+    os.environ['CAPIF_HTTPS_PORT'] = "443"
+    os.environ['PATH_TO_CERTS'] = "usr/src/app/capif_onboarding"
 
 
 def read_command_line_args():
