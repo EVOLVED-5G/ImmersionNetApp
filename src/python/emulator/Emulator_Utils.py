@@ -14,8 +14,21 @@ class EmulatorAccessToken:
         self.token_type = token_type
 
 
+class MyConfig:
+    def __int__(self):
+        self.token = get_token_with_capif()
+        self.netapp_id = os.getenv('NETAPP_ID')
+        self.nef_host = os.getenv('NEF_HOST')
+        self.nef_url = "http://{}:{}".format(self.nef_host, os.getenv('NEF_PORT'))
+        self.nef_user = os.getenv('NEF_USER')
+        self.nef_pass = os.getenv('NEF_PASS')
+        self.capif_host = os.getenv('CAPIF_HOST')
+        self.capif_https_port = os.getenv('CAPIF_HTTPS_PORT')
+        self.path_to_certs = os.getenv('PATH_TO_CERTS')
+
+
 def get_token() -> Token:
-    # User name and pass matches are set in the .env of the docker of NEF_EMULATOR. See
+    # Username and pass matches are set in the .env of the docker of NEF_EMULATOR. See
     # https://github.com/EVOLVED-5G/NEF_emulator
     username = os.getenv('NEF_USER')
     password = os.getenv('NEF_PASS')

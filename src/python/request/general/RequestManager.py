@@ -48,7 +48,7 @@ class RequestManager:
             asked_qos = msg.qos_params['initialQoSRequest']
             # Simply create a dummy answer and send it back to the vApp
             answer = QosMsg(MsgUtils.MsgType.ANSWER, content_type, MsgUtils.AnswerStatus.OK, asked_qos)
-            # Translate it into json with the unpickable flag set to false to remove jsonpickle artifacts
+            # Translate it into json with the unpickable flag as False to remove jsonpickle artifacts
             self.server.add_msg_to_send(jsonpickle.encode(answer, unpicklable=False, make_refs=False))
 
     # Handle a monitoring request from the vApp

@@ -10,9 +10,11 @@ from python.request.general.APIRequester import APIRequester
 # It relies on 1) the QosAwareness class from the SDK and 2) on the AsSessionWithQos API
 class QoSRequester(APIRequester):
 
-    def __init__(self, flask_th, access_token):
-        super().__init__(flask_th, access_token)
-        self.qos_awareness = QosAwareness(self.host, self.token.access_token)
+    def __init__(self, flask_th, conf):
+        super().__init__(flask_th, conf)
+        self.qos_awareness = QosAwareness(self.myconfig.nef_url, self.myconfig.token.access_token,
+                                          self.myconfig.path_to_certs,
+                                          self.myconfig.capif_host, self.myconfig.capif_https_port)
 
     def sessionqos_subscription(self, ue_ipv4="10.0.0.1"):
         network_identifier = QosAwareness.NetworkIdentifier.IP_V4_ADDRESS
@@ -31,7 +33,7 @@ class QoSRequester(APIRequester):
         notification_destination = self.flask_thread.add_5gcore_endpoint(EndpointType.UE_GBR)
 
         subscription = self.qos_awareness.create_guaranteed_bit_rate_subscription(
-            netapp_id=self.netapp_id,
+            netapp_id=self.myconfig.netapp_id,
             equipment_network_identifier=ue_ipv4,
             network_identifier=network_identifier,
             notification_destination=notification_destination,
@@ -48,28 +50,61 @@ class QoSRequester(APIRequester):
         #    so you will never retrieve this notification while testing with the NEF)
         # print(subscription)
 
+    def sessionqos_subscription_capif(self, host, access_token, certificate_folder,
+                                      capifhost, capifport, callback_server, ue_ipv4="10.0.0.1"):
+        netapp_id = self.myconfig.netapp_id
+        qos_awareness = QosAwareness(host, access_token, certificate_folder, capifhost, capifport)
+        network_identifier = QosAwareness.NetworkIdentifier.IP_V4_ADDRESS
+        conversational_voice = QosAwareness.GBRQosReference.CONVERSATIONAL_VOICE
+        # In this scenario we monitor UPLINK
+        uplink = QosAwareness.QosMonitoringParameter.UPLINK
+        # Minimum delay of data package during uplink, in milliseconds
+        uplink_threshold = 20
+        gigabyte = 1024 * 1024 * 1024
+        # Up to 10 gigabytes 5 GB downlink, 5gb uplink
+        usage_threshold = UsageThreshold(duration=None,  # not supported
+                                         total_volume=10 * gigabyte,  # 10 Gigabytes of total volume
+                                         downlink_volume=5 * gigabyte,  # 5 Gigabytes for downlink
+                                         uplink_volume=5 * gigabyte  # 5 Gigabytes for uplink
+                                         )
+
+        subscription = qos_awareness.create_guaranteed_bit_rate_subscription(
+            netapp_id=netapp_id,
+            equipment_network_identifier=ue_ipv4,
+            network_identifier=network_identifier,
+            notification_destination=callback_server,
+            gbr_qos_reference=conversational_voice,
+            usage_threshold=usage_threshold,
+            qos_monitoring_parameter=uplink,
+            threshold=uplink_threshold,
+            reporting_mode=QosAwareness.PeriodicReportConfiguration(repetition_period_in_seconds=10)
+        )
+
+        qos_awareness_response = subscription.to_dict()
+        return qos_awareness_response
+
     def read_and_delete_all_existing_subscriptions(self):
         try:
-            all_subscriptions = self.qos_awareness.get_all_subscriptions(self.netapp_id)
+            all_subscriptions = self.qos_awareness.get_all_subscriptions(self.myconfig.netapp_id)
             print(all_subscriptions)
 
             for subscription in all_subscriptions:
                 id_sub = subscription.link.split("/")[-1]
                 print("Deleting subscription with id: " + id_sub)
-                self.qos_awareness.delete_subscription(self.netapp_id, id_sub)
+                self.qos_awareness.delete_subscription(self.myconfig.netapp_id, id_sub)
         except ApiException as ex:
             if ex.status == 404:
                 print("No active qos subscription found")
-            else: # something else happened, re-throw the exception
+            else:  # something else happened, re-throw the exception
                 raise
 
     def delete_all_existing_subscriptions(self):
         try:
-            all_subscriptions = self.qos_awareness.get_all_subscriptions(self.netapp_id)
+            all_subscriptions = self.qos_awareness.get_all_subscriptions(self.myconfig.netapp_id)
 
             for subscription in all_subscriptions:
                 id_sub = subscription.link.split("/")[-1]
-                self.qos_awareness.delete_subscription(self.netapp_id, id_sub)
+                self.qos_awareness.delete_subscription(self.myconfig.netapp_id, id_sub)
 
         except ApiException as ex:
             if ex.status == 404:
