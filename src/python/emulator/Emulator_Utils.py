@@ -15,11 +15,11 @@ class EmulatorAccessToken:
 
 
 class MyConfig:
-    def __int__(self):
+    def __init__(self):
         self.token = get_token_with_capif()
         self.netapp_id = os.getenv('NETAPP_ID')
-        self.nef_host = os.getenv('NEF_HOST')
-        self.nef_url = "http://{}:{}".format(self.nef_host, os.getenv('NEF_PORT'))
+        # self.nef_host = os.getenv('NEF_HOST')
+        self.nef_url = "{}:{}".format(os.getenv('NEF_IP'), os.getenv('NEF_PORT'))
         self.nef_user = os.getenv('NEF_USER')
         self.nef_pass = os.getenv('NEF_PASS')
         self.capif_host = os.getenv('CAPIF_HOST')
@@ -51,12 +51,13 @@ def get_api_client(token) -> swagger_client.ApiClient:
 
 
 def get_token_with_capif() -> Token:
-    nef_url = "http://{}:{}".format(os.getenv('NEF_HOST'), os.getenv('NEF_PORT'))
+    nef_url = "{}:{}".format(os.getenv('NEF_IP'), os.getenv('NEF_PORT'))
     nef_user = os.getenv('NEF_USER')
     nef_pass = os.getenv('NEF_PASS')
 
     configuration = Configuration()
     configuration.host = nef_url
+    print("NEF URL: ", nef_url)
     api_client = ApiClient(configuration=configuration)
     api_client.select_header_content_type(["application/x-www-form-urlencoded"])
     api = LoginApi(api_client)
