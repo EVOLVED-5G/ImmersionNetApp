@@ -1,4 +1,3 @@
-from python.emulator import Emulator_Utils
 from python.emulator.Emulator_Utils import MyConfig
 from python.request.location.LocationRequests import LocationRequester
 from python.request.qos.QoSRequests import QoSRequester

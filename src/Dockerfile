@@ -8,6 +8,8 @@ RUN pip3 install -r requirements.txt
 COPY . .
 EXPOSE 9876 9877 9998 9999
 
+ADD . /usr/src/app/
+
 CMD ["sh", "prepare.sh"]
 
 CMD [ "python", "main.py", "--config", "container", "--host=0.0.0.0"]
