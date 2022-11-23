@@ -34,6 +34,8 @@ services:
       - "9877:9877"
       - "9998:9998"
       - "9999:9999"
+    extra_hosts:
+      - "capifcore:172.17.0.1" # 172.18.0.1?
 
 # We need to create a network bridge with nef_emulator_default to be able to reach the NEF emulator 
 # This works

@@ -6,7 +6,7 @@
   "capif_netapp_username": "imm_capif_username",
   "capif_netapp_password": "imm_capif_password",
   "capif_callback_url": "http://0.0.0.0:5000",
-  "description": ",test_app_description",
+  "description": ",imm_app_description",
   "csr_common_name": "test_app_common_name",
   "csr_organizational_unit": "test_app_ou",
   "csr_organization": "test_app_o",
