@@ -45,7 +45,6 @@ class CustomEndpoint:
         self.url_rule = url_rule
         self.methods = methods
         self.func = func
-        # Read the config file to get the first part of the endpoint url
-        self.complete_url = os.getenv('NEF_CALLBACK_URL') + str(flask_port) + self.url_rule
+        self.complete_url = os.getenv('NEF_CALLBACK_IP') + ':' + str(flask_port) + self.url_rule
 
 

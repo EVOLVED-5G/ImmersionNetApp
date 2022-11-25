@@ -16,14 +16,16 @@ class EmulatorAccessToken:
 
 class MyConfig:
     def __init__(self):
-        self.token = get_token_with_capif()
         self.netapp_id = os.getenv('NETAPP_ID')
-        # self.nef_host = os.getenv('NEF_HOST')
         self.nef_url = "{}:{}".format(os.getenv('NEF_IP'), os.getenv('NEF_PORT'))
         self.nef_user = os.getenv('NEF_USER')
         self.nef_pass = os.getenv('NEF_PASS')
+        self.nef_callback_url = "{}:{}".format(os.getenv('NEF_CALLBACK_IP'), os.getenv('NETAPP_PORT_5G'))
+        print("Nef callback url : ", self.nef_callback_url)
+        self.token = get_token_with_capif(self.nef_url, self.nef_user, self.nef_pass)
+
         self.capif_host = os.getenv('CAPIF_HOST')
-        self.capif_https_port = os.getenv('CAPIF_HTTPS_PORT')
+        self.capif_https_port = int(os.getenv('CAPIF_HTTPS_PORT'))
         self.path_to_certs = os.getenv('PATH_TO_CERTS')
 
 
@@ -50,18 +52,15 @@ def get_api_client(token) -> swagger_client.ApiClient:
     return api_client
 
 
-def get_token_with_capif() -> Token:
-    nef_url = "{}:{}".format(os.getenv('NEF_IP'), os.getenv('NEF_PORT'))
-    nef_user = os.getenv('NEF_USER')
-    nef_pass = os.getenv('NEF_PASS')
-
+def get_token_with_capif(nef_url, nef_user, nef_pass):
+    print("Requiring token with nef_url: ", nef_url, "user ", nef_user, " and password ", nef_pass)
     configuration = Configuration()
     configuration.host = nef_url
-    print("NEF URL: ", nef_url)
     api_client = ApiClient(configuration=configuration)
     api_client.select_header_content_type(["application/x-www-form-urlencoded"])
     api = LoginApi(api_client)
     token = api.login_access_token_api_v1_login_access_token_post("", nef_user, nef_pass, "", "", "")
+    print("Got token ", token)
     return token
 
 

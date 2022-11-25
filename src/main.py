@@ -33,16 +33,16 @@ def add_local_env_var():
     os.environ['NEF_USER'] = "admin@my-email.com"
     os.environ['NEF_PASS'] = "pass"
     # Env variables related to Capif
-    os.environ['CAPIF_HOST'] = "127.0.0.1"
+    os.environ['CAPIF_HOST'] = "172.18.0.1"
     os.environ['CAPIF_HTTP_PORT'] = "8080"
     os.environ['CAPIF_HTTPS_PORT'] = "443"
-    os.environ['PATH_TO_CERTS'] = "./capif_onboarding"
+    os.environ['PATH_TO_CERTS'] = "D:\\Charles\\Code\\Evolved5G\\ImmersionNetApp\\src\\capif_onboarding"
 
 
 def read_command_line_args():
     parser = argparse.ArgumentParser(description='Immersion\'s NetApp')
     parser.add_argument("--config", help="Use either the default config (default, NetApp running on host)"
-                                         "or the containerized config (container)", default="default")
+                                         "or the containerized config (container)", default="container")
     parser.add_argument("--host", help="Specify host, default is 0.0.0.0", default="0.0.0.0")
     return parser.parse_args()
 

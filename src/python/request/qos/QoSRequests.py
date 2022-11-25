@@ -50,10 +50,9 @@ class QoSRequester(APIRequester):
         #    so you will never retrieve this notification while testing with the NEF)
         # print(subscription)
 
-    def sessionqos_subscription_capif(self, host, access_token, certificate_folder,
-                                      capifhost, capifport, callback_server, ue_ipv4="10.0.0.1"):
+    def sessionqos_subscription_capif(self, ue_ipv4="10.0.0.1"):
         netapp_id = self.myconfig.netapp_id
-        qos_awareness = QosAwareness(host, access_token, certificate_folder, capifhost, capifport)
+        # qos_awareness = QosAwareness(host, access_token, certificate_folder, capifhost, capifport)
         network_identifier = QosAwareness.NetworkIdentifier.IP_V4_ADDRESS
         conversational_voice = QosAwareness.GBRQosReference.CONVERSATIONAL_VOICE
         # In this scenario we monitor UPLINK
@@ -68,11 +67,11 @@ class QoSRequester(APIRequester):
                                          uplink_volume=5 * gigabyte  # 5 Gigabytes for uplink
                                          )
 
-        subscription = qos_awareness.create_guaranteed_bit_rate_subscription(
+        subscription = self.qos_awareness.create_guaranteed_bit_rate_subscription(
             netapp_id=netapp_id,
             equipment_network_identifier=ue_ipv4,
             network_identifier=network_identifier,
-            notification_destination=callback_server,
+            notification_destination=self.myconfig.nef_callback_url,
             gbr_qos_reference=conversational_voice,
             usage_threshold=usage_threshold,
             qos_monitoring_parameter=uplink,

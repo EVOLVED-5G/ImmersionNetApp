@@ -13,7 +13,7 @@ from python.request.qos.QosUtils import QosNotif
 # RequestManager
 # A class handling requests from the VApp and messages from/to the 5G Core.
 # It triggers the corresponding actions, like creating the corresponding 5G API calls
-from python.request.web.FlashWebServer import FlaskWebServer
+from python.request.web.FlaskWebServer import FlaskWebServer
 from python.utils.WebUtils import ActionResult
 
 
@@ -32,9 +32,11 @@ class RequestManager:
 
     def start_communications_request(self):
         from python.MainController import ControllerCMD
+        print("Receiving start communication request")
         self.controller_queue.put(ControllerCMD.START_COMM)
 
     def start_communications(self):
+        print("Starting comms with emulator...")
         self.flask_thread.start()
         # Mandatory call to get access token and create APIRequester instances
         self.core5GManager.start_comm_with_emulator()

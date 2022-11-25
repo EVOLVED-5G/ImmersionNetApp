@@ -16,12 +16,16 @@ class Core5GRequester:
         self.myconfig = MyConfig()
         self.locationRequester = LocationRequester(self.flask_thread, self.myconfig)
         self.qosRequester = QoSRequester(self.flask_thread, self.myconfig)
+        print("Loc Requester: ", self.locationRequester)
+        print("QoS Requester: ", self.qosRequester)
 
     def track_ue_location(self, id_ue):
-        self.locationRequester.monitor_subscription_capif(id_ue)
+        print('Requiring loc subscription for UE ', id_ue)
+        self.locationRequester.monitor_subscription_capif(times=100, id_ue=id_ue)
 
     def start_gbr_monitoring(self, ue_ipv4):
-        self.qosRequester.sessionqos_subscription_capif(ue_ipv4)
+        print('Requiring qos subscription for UE ', ue_ipv4)
+        self.qosRequester.sessionqos_subscription_capif(ue_ipv4=ue_ipv4)
 
     def clean_subscriptions(self):
         self.locationRequester.delete_all_existing_subscriptions()
