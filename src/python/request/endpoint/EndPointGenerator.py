@@ -46,5 +46,6 @@ class CustomEndpoint:
         self.methods = methods
         self.func = func
         self.complete_url = os.getenv('NEF_CALLBACK_IP') + ':' + str(flask_port) + self.url_rule
+        print("Endpoint addr:", self.complete_url)
 
 

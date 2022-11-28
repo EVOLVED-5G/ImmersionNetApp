@@ -32,15 +32,14 @@ class LocationRequester(APIRequester):
         # print(subscription)
 
     def monitor_subscription_capif(self, times=100, id_ue=10001):
-        expire_time = (datetime.datetime.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
+        expire_time = (datetime.datetime.today() + datetime.timedelta(minutes=15)).strftime('%Y-%m-%dT%H:%M:%SZ')
         netapp_id = self.myconfig.netapp_id
-        # location_subscriber = LocationSubscriber(host, access_token, certificate_folder, capifhost, capifport)
         external_id = str(id_ue) + "@domain.com"
 
         subscription = self.location_subscriber.create_subscription(
             netapp_id=netapp_id,
             external_id=external_id,
-            notification_destination=self.myconfig.nef_callback_url,
+            notification_destination=self.flask_thread.add_5gcore_endpoint(EndpointType.UE_LOCATION),
             maximum_number_of_reports=times,
             monitor_expire_time=expire_time
         )

@@ -36,6 +36,8 @@ def add_local_env_var():
     os.environ['CAPIF_HOST'] = "172.18.0.1"
     os.environ['CAPIF_HTTP_PORT'] = "8080"
     os.environ['CAPIF_HTTPS_PORT'] = "443"
+    # Note: now that Capif is integrated, you should probably not test locally anyway.
+    # Use the container instead!
     os.environ['PATH_TO_CERTS'] = "D:\\Charles\\Code\\Evolved5G\\ImmersionNetApp\\src\\capif_onboarding"
 
 
