@@ -60,6 +60,9 @@ class UEsController:
 
         return result
 
+    def clean_all_ues(self):
+        self.monitored_ues.clear()
+
 
 class MonitoredUE:
 

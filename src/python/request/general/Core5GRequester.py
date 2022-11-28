@@ -20,12 +20,16 @@ class Core5GRequester:
         print("QoS Requester: ", self.qosRequester)
 
     def track_ue_location(self, id_ue):
-        print('Requiring loc subscription for UE ', id_ue)
-        self.locationRequester.monitor_subscription_capif(times=100, id_ue=id_ue)
+        if self.locationRequester is not None:
+            self.locationRequester.monitor_subscription_capif(times=100, id_ue=id_ue)
+        else:
+            print("Cannot create loc subscription: LocationRequester is null. Please check Capif registration.")
 
     def start_gbr_monitoring(self, ue_ipv4):
-        print('Requiring qos subscription for UE ', ue_ipv4)
-        self.qosRequester.sessionqos_subscription_capif(ue_ipv4=ue_ipv4)
+        if self.qosRequester is not None:
+            self.qosRequester.sessionqos_subscription_capif(ue_ipv4=ue_ipv4)
+        else:
+            print("Cannot create qos subscription: QoSRequester is null. Please check Capif registration.")
 
     def clean_subscriptions(self):
         self.locationRequester.delete_all_existing_subscriptions()

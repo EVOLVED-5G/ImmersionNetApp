@@ -74,10 +74,11 @@ class LocationRequester(APIRequester):
             all_subscriptions = self.location_subscriber.get_all_subscriptions(self.myconfig.netapp_id)
             for subscription in all_subscriptions:
                 id_sub = subscription.link.split("/")[-1]
+                print("Deleting loc subscription ", id_sub)
                 self.location_subscriber.delete_subscription(self.myconfig.netapp_id, id_sub)
 
         except ApiException as ex:
             if ex.status == 404:
-                print("No active transcriptions found")
+                print("No active location subscription found")
             else:  # something else happened, re-throw the exception
                 raise

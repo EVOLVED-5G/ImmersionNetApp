@@ -119,6 +119,10 @@ class RequestManager:
     def get_monitored_ues(self):
         return self.ue_controller.get_monitored_ues()
 
+    def delete_all_subscriptions(self):
+        self.core5GManager.clean_subscriptions()
+        self.ue_controller.clean_all_ues()
+
     def polite_stop_children(self):
         self.flask_thread.polite_stop()
 

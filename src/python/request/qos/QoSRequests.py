@@ -102,11 +102,12 @@ class QoSRequester(APIRequester):
 
             for subscription in all_subscriptions:
                 id_sub = subscription.link.split("/")[-1]
+                print("Deleting qos subscription ", id_sub)
                 self.qos_awareness.delete_subscription(self.myconfig.netapp_id, id_sub)
 
         except ApiException as ex:
             if ex.status == 404:
-                print("No active transcriptions found")
+                print("No active QoS subscription found")
             else:  # something else happened, re-throw the exception
                 raise
 

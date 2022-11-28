@@ -19,7 +19,7 @@
         <div id="toastSuccess" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
-                    Successfully added two monitored UEs.
+                    Success! Your action has been fully handheld.
                 </div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
@@ -29,7 +29,7 @@
         <div id="toastWarning" class="toast align-items-center text-bg-warning border-0" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
-                    Warning: at least one requested UE was already monitored.
+                    Warning: at least one part of your action failed.
                 </div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
@@ -39,7 +39,7 @@
         <div id="toastError" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
-                    Error: could not perform action.
+                    Error: could not perform required action.
                 </div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
@@ -104,6 +104,9 @@
     <div class="row">
         <div class="col">
             <a href=# id=quickTestBtn><button type="button" class="btn btn-primary w-25">Quick test</button></a>
+        </div>
+        <div class="col">
+            <a href=# id=cleanSubsBtn><button type="button" class="btn btn-primary w-25">Clean subs</button></a>
         </div>
         <div class="col">
             <div class="container p-2 bg-secondary text-white w-25">
@@ -176,6 +179,21 @@
             });
     </script>
 
+
+    <!-- Script to delete all existing subscriptions  -->
+    <script>
+            $(function() {
+                $("a#cleanSubsBtn").bind('click', function(){
+                $.getJSON($SCRIPT_ROOT + '/_clean_subs', {
+                }, function(data) {
+                 const selectedToast = document.getElementById(data.result_type)
+                 const toast = new bootstrap.Toast(selectedToast)
+                 toast.show()
+                 });
+                return false;
+                });
+            });
+    </script>
 
 
     <br/><br/>

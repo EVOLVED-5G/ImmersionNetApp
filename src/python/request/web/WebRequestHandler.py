@@ -1,8 +1,9 @@
 from flask import render_template, request, jsonify
 from python.utils.ConfigUtils import ConfigReader
-import requests
 import time
 import flask
+
+from python.utils.WebUtils import ActionResult
 
 
 def home_page():
@@ -56,6 +57,7 @@ class WebRequestHandler:
         self.flask.add_web_endpoint(url="/_get_monitored_ues", func=self.on_get_monitored_ues)
         self.flask.add_web_endpoint(url="/_add_test_ues", func=self.on_adding_test_ues)
         self.flask.add_web_endpoint(url="/stream", func=self.stream)
+        self.flask.add_web_endpoint(url="/_clean_subs", func=self.delete_all_subscriptions)
 
     def monitoring_session_page(self):
         self.flask.start_session_requested()
@@ -108,3 +110,9 @@ class WebRequestHandler:
                 yield report
 
         return flask.Response(eventStream(), mimetype="text/event-stream")
+
+    def delete_all_subscriptions(self):
+        self.flask.delete_all_subscriptions()
+        res_type = ActionResult.SUCCESS
+        return jsonify(result_type=res_type)
+
