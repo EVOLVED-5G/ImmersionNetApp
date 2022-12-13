@@ -11,6 +11,6 @@ ADD . /usr/src/app/
 EXPOSE 9876 9877 9988 9998 9999
 
 # Version without deployment, just a container
-CMD [ "sh", "prepare.sh"]
+#CMD [ "sh", "prepare.sh"]
 #Version for Malaga deployment
-#CMD [ "sh", "prepare_deploy.sh"]
+CMD [ "sh", "prepare_deploy.sh"]
