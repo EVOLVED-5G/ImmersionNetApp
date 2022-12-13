@@ -3,6 +3,9 @@ import os
 from python.request.endpoint.EndpointUtils import EndpointType
 from python.utils import ConfigUtils
 
+DEF_LOC_URL_PART = "/monitoring/loc"
+DEF_QOS_URL_PART = "/monitoring/gbr"
+
 
 # Class handling the creation of Endpoint objects
 # In particular, it manages the corresponding urls depending on each endpoint type
@@ -17,12 +20,12 @@ class EndPointGenerator:
     # Call me to create an endpoint dedicated to communication with 5G components (ex: the NEF emulator)
     def create_5gcore_endpoint(self, func, type_endpoint):
         if type_endpoint == EndpointType.UE_LOCATION:
-            endpoint = CustomEndpoint(type_endpoint, "/monitoring/loc" + str(self.num_location_ep),
+            endpoint = CustomEndpoint(type_endpoint, DEF_LOC_URL_PART + str(self.num_location_ep),
                                       ['POST'], func, self.flask_port)
             self.num_location_ep += 1
 
         elif type_endpoint == EndpointType.UE_GBR:
-            endpoint = CustomEndpoint(type_endpoint, "/monitoring/gbr" + str(self.num_gbr_ep),
+            endpoint = CustomEndpoint(type_endpoint, DEF_QOS_URL_PART + str(self.num_gbr_ep),
                                       ['POST'], func, self.flask_port)
             self.num_gbr_ep += 1
 
@@ -45,7 +48,7 @@ class CustomEndpoint:
         self.url_rule = url_rule
         self.methods = methods
         self.func = func
-        self.complete_url = os.getenv('NEF_CALLBACK_IP') + ':' + str(flask_port) + self.url_rule
+        self.complete_url = str(os.getenv('CALLBACK_IP')) + ':' + str(flask_port) + self.url_rule
         print("Endpoint addr:", self.complete_url)
 
 
