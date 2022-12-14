@@ -1,9 +1,10 @@
 # syntax=docker/dockerfile:1
 FROM python:3.10
 
-RUN mkdir -p /usr/src/app
-RUN mkdir capif_onboarding
+#RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
+RUN mkdir -p capif_onboarding
+
 ADD requirements.txt /usr/src/app
 RUN pip3 install -r requirements.txt
 
