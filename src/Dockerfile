@@ -6,6 +6,8 @@ WORKDIR /usr/src/app
 ADD requirements.txt /usr/src/app
 RUN pip3 install -r requirements.txt
 
+#RUN apt-get install jq -y
+
 ADD . /usr/src/app/
 
 EXPOSE 9876 9877 9988 9998 9999
