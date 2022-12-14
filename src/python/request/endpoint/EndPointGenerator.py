@@ -21,12 +21,12 @@ class EndPointGenerator:
     def create_5gcore_endpoint(self, func, type_endpoint):
         if type_endpoint == EndpointType.UE_LOCATION:
             endpoint = CustomEndpoint(type_endpoint, DEF_LOC_URL_PART + str(self.num_location_ep),
-                                      ['POST'], func, self.flask_port)
+                                      ['POST'], func, True)
             self.num_location_ep += 1
 
         elif type_endpoint == EndpointType.UE_GBR:
             endpoint = CustomEndpoint(type_endpoint, DEF_QOS_URL_PART + str(self.num_gbr_ep),
-                                      ['POST'], func, self.flask_port)
+                                      ['POST'], func, True)
             self.num_gbr_ep += 1
 
         else:
@@ -36,19 +36,34 @@ class EndPointGenerator:
         return endpoint
 
     def create_web_endpoint(self, url, func):
-        endpoint = CustomEndpoint(EndpointType.WEB, url, ['GET'], func, self.flask_port)
+        endpoint = CustomEndpoint(EndpointType.WEB, url, ['GET'], func, False)
         self.endpoints.append(endpoint)
         return endpoint
 
 
 class CustomEndpoint:
 
-    def __init__(self, type_ep, url_rule, methods, func, flask_port):
+    # def __init__(self, type_ep, url_rule, methods, func, flask_port):
+    #     self.type_ep = type_ep
+    #     self.url_rule = url_rule
+    #     self.methods = methods
+    #     self.func = func
+    #     # self.complete_url = str(os.getenv('CALLBACK_IP')) + ':' + str(flask_port) + self.url_rule
+    #     self.complete_url = str(os.getenv('CALLBACK_IP')) + ':' + str(flask_port) + self.url_rule
+    #     print("Endpoint addr:", self.complete_url)
+
+    def __init__(self, type_ep, url_rule, methods, func, use_5g_port):
         self.type_ep = type_ep
         self.url_rule = url_rule
         self.methods = methods
         self.func = func
-        self.complete_url = str(os.getenv('CALLBACK_IP')) + ':' + str(flask_port) + self.url_rule
+
+        # self.complete_url = str(os.getenv('CALLBACK_IP')) + ':' + str(flask_port) + self.url_rule
+        if use_5g_port:
+            self.complete_url = str(os.getenv('CALLBACK_ADDRESS')) + self.url_rule
+        else:
+            self.complete_url = str(os.getenv('FRONTEND_CALLBACK_ADDRESS')) + self.url_rule
+
         print("Endpoint addr:", self.complete_url)
 
 
