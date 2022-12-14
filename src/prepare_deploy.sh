@@ -5,3 +5,4 @@ jq -r .capif_https_port=\"$CAPIF_PORT_HTTPS\" capif_registration.json >> tmp.jso
 jq -r .capif_callback_url=\"http://$CALLBACK_ADDRESS\" capif_registration.json >> tmp.json && mv tmp.json capif_registration.json
 evolved5g register-and-onboard-to-capif --config_file_full_path="/usr/src/app/capif_registration.json"
 tail -f /dev/null
+python main.py
