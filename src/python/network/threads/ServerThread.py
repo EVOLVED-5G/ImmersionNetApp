@@ -21,8 +21,11 @@ class ServerThread(PoliteThread):
         self.serv_port = None
 
     def run(self):
-        self.serv_addr = os.getenv('NETAPP_SERVER_VAPP')
-        self.serv_port = int(os.getenv('NETAPP_PORT_VAPP'))
+        server_url = os.getenv('SERVER_FOR_VAPP').split(':')
+        self.serv_addr = server_url[0]
+        self.serv_port = int(server_url[1])
+        # self.serv_addr = os.getenv('NETAPP_SERVER_VAPP')
+        # self.serv_port = int(os.getenv('NETAPP_PORT_VAPP'))
         self.sock.bind(('0.0.0.0', self.serv_port))
 
         # Wait for incoming connections
