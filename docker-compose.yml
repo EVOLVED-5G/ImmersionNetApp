@@ -9,19 +9,25 @@ services:
       NETAPP_ID: "${netapp_id}"
       NETAPP_NAME: "${netapp_name}"
       NETAPP_IP: "${netapp_ip}"
-      NETAPP_SERVER_VAPP: "${netapp_server_vapp}"
-      NETAPP_PORT_5G: "${netapp_port_5g}"
-      NETAPP_PORT_WEB: "${netapp_port_web}"
-      NETAPP_PORT_VAPP: "${netapp_port_vapp}"
-      CALLBACK_IP: "${callback_ip}"
-      NEF_IP: "${nef_ip}"
-      NEF_PORT: "${nef_port}"
+      SERVER_FOR_VAPP: "${server_for_vapp}"
+      CALLBACK_ADDRESS: "${callback_address}"
+      FRONTEND_CALLBACK_ADDRESS: "${frontend_callback_address}"
+      # NEF variabless
+      NEF_ADDRESS: "${nef_address}"
       NEF_USER: "${nef_user}"
-      NEF_PASS: "${nef_pass}"
-      CAPIF_HOST: "${capif_host}"
-      CAPIF_HTTP_PORT: "${capif_http_port}"
-      CAPIF_HTTPS_PORT: "${capif_https_port}"
+      NEF_PASSWORD: "${nef_password}"
+      # CAPIF variabes
+      CAPIF_HOSTNAME: "${capif_hostname}"
+      CAPIF_PORT_HTTP: "${capif_port_http}"
+      CAPIF_PORT_HTTPS: "${capif_port_https}"
       PATH_TO_CERTS: "${path_to_certs}"
+      
+      #NEF_IP: "${nef_ip}"
+      #NEF_PORT: "${nef_port}"
+      #NETAPP_SERVER_VAPP: "${netapp_server_vapp}"
+      #NETAPP_PORT_5G: "${netapp_port_5g}"
+      #NETAPP_PORT_WEB: "${netapp_port_web}"
+      #NETAPP_PORT_VAPP: "${netapp_port_vapp}"
 
     build:
     # Path to the src code

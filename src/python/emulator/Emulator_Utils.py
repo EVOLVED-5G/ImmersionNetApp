@@ -18,13 +18,15 @@ class EmulatorAccessToken:
 class MyConfig:
     def __init__(self):
         self.netapp_id = str(os.getenv('NETAPP_ID'))
-        self.nef_url = "{}:{}".format(os.getenv('NEF_IP'), os.getenv('NEF_PORT'))
+        # self.nef_url = "{}:{}".format(os.getenv('NEF_IP'), os.getenv('NEF_PORT'))
+        self.nef_url = str(os.getenv('NEF_ADDRESS'))
         self.nef_user = str(os.getenv('NEF_USER'))
-        self.nef_pass = str(os.getenv('NEF_PASS'))
-        self.callback_url = "{}:{}".format(os.getenv('CALLBACK_IP'), os.getenv('NETAPP_PORT_5G'))
+        self.nef_pass = str(os.getenv('NEF_PASSWORD'))
+        # self.callback_url = "{}:{}".format(os.getenv('CALLBACK_IP'), os.getenv('NETAPP_PORT_5G'))
+        self.callback_url = str(os.getenv('CALLBACK_ADDRESS'))
         self.token = get_token_with_capif(self.nef_url, self.nef_user, self.nef_pass)
-        self.capif_host = str(os.getenv('CAPIF_HOST'))
-        self.capif_https_port = int(os.getenv('CAPIF_HTTPS_PORT'))
+        self.capif_host = str(os.getenv('CAPIF_HOSTNAME'))
+        self.capif_https_port = int(os.getenv('CAPIF_PORT_HTTPS'))
         self.path_to_certs = str(os.getenv('PATH_TO_CERTS'))
 
 
