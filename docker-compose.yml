@@ -12,6 +12,8 @@ services:
       SERVER_FOR_VAPP: "${server_for_vapp}"
       CALLBACK_ADDRESS: "${callback_address}"
       FRONTEND_CALLBACK_ADDRESS: "${frontend_callback_address}"
+      NETAPP_PORT_5G: "${netapp_port_5g}"
+      NETAPP_PORT_WEB: "${netapp_port_web}"
       # NEF variabless
       NEF_ADDRESS: "${nef_address}"
       NEF_USER: "${nef_user}"

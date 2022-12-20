@@ -32,7 +32,8 @@ class FlaskWebServer(threading.Thread):
         self.webHandler = None
 
     def run(self):
-        self.web_port = int(os.getenv('FRONTEND_CALLBACK_ADDRESS').split(':')[2])
+        # self.web_port = int(os.getenv('FRONTEND_CALLBACK_ADDRESS').split(':')[2])
+        self.web_port = int(os.getenv('NETAPP_PORT_WEB'))
         self.endpointGenerator = EndPointGenerator(self.web_port)
         self.webHandler = WebRequestHandler(self)
 

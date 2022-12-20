@@ -33,7 +33,8 @@ class FlaskThread(threading.Thread):
         self.endpointGenerator = None
 
     def run(self):
-        self.port = int(os.getenv('CALLBACK_ADDRESS').split(':')[2])
+        # self.port = int(os.getenv('CALLBACK_ADDRESS').split(':')[2])
+        self.port = int(os.getenv('NETAPP_PORT_5G'))
         self.endpointGenerator = EndPointGenerator(self.port)
 
         # Start the Flask server in a dedicated thread to avoid being blocked here
