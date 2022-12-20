@@ -32,7 +32,8 @@ class LocationRequester(APIRequester):
         # print(subscription)
 
     def monitor_subscription_capif(self, times=100, id_ue=10001):
-        expire_time = (datetime.datetime.today() + datetime.timedelta(minutes=15)).strftime('%Y-%m-%dT%H:%M:%SZ')
+        # expire_time = (datetime.datetime.today() + datetime.timedelta(minutes=15)).strftime('%Y-%m-%dT%H:%M:%SZ')
+        expire_time = (datetime.datetime.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
         netapp_id = self.myconfig.netapp_id
         external_id = str(id_ue) + "@domain.com"
 

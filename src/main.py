@@ -4,7 +4,7 @@ import argparse
 
 
 def welcome():
-    msg = "This is the IMM NetApp, version 2.9. This NetApp is built within the Evolved-5G european project."
+    msg = "This is the IMM NetApp, version 3.0. This NetApp is built within the Evolved-5G european project."
     print(msg)
     # Read command line arguments, including the selected configuration
     args = read_command_line_args()
@@ -13,6 +13,16 @@ def welcome():
     print("Using the " + args.config + " config")
     if args.config == "default":
         add_local_env_var()
+
+    debug_env_vars()
+
+
+def debug_env_vars():
+    print("NetApp id: ", str(os.environ['NETAPP_ID']))
+    print("Callback address: ", str(os.environ['CALLBACK_ADDRESS']))
+    print("Frontend callback address: ", str(os.environ['FRONTEND_CALLBACK_ADDRESS']))
+    print("Nef address: ", str(os.environ['NEF_ADDRESS']))
+    print("Path to capif certificates: ", str(os.environ['PATH_TO_CERTS']))
 
 
 # Call me only when working locally for dev/debug
