@@ -6,7 +6,7 @@ import jsonpickle
 from python.network.msg import MsgUtils
 from python.network.threads.PoliteThread import PoliteThread
 from python.emulator.MonitoringUtils import MonitoringRequest
-from python.request.qos.QoSMsg import QoSRequest
+from python.request.qos.QoSPerfMsg import QoSRequest
 
 
 # MsgDispatcher

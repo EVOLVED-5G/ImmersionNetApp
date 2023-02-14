@@ -2,7 +2,7 @@
 from python.network.msg.MsgUtils import AnswerForVApp, AnswerStatus
 
 
-class QosMsg(AnswerForVApp):
+class QosPerfMsg(AnswerForVApp):
 
     def __init__(self, type_msg, type_content, status, proposed_qos):
         super().__init__(type_msg, type_content, status)
@@ -35,7 +35,7 @@ class QoSRequest(object):
         return self.qos_params.to_string()
 
 
-class QoSParams(object):
+class QoSPerfParams(object):
 
     def __init__(self, l_max, l_desired, bandwidth):
         self.max_latency = l_max

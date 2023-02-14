@@ -68,11 +68,17 @@ class MonitoredUE:
 
     def __init__(self, ipv4, use_loc, qos, status, cell="No cell", qos_guaranteed="True"):
         self.ipv4 = ipv4
+        self.is_local_user = True
         self.use_loc = use_loc
         self.use_qos = qos
         self.status = status
         self.cell = cell
         self.qos_guaranteed = qos_guaranteed
+
+        # Todo: add a cleaner way to determine if a user is a local technician or remote expert.
+        # For now, we consider that user 10.0.0.2 in the NEF scenario is local (in IMM building)
+        if "10.0.0.2" not in self.ipv4:
+            self.isLocalUser = False
 
     def str_summary(self):
         res = "UE: " + self.ipv4 + "   "

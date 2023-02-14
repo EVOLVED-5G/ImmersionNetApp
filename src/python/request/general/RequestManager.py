@@ -3,7 +3,7 @@ from python.emulator.MonitoringUtils import MonitoringTriggerAnswer
 from python.network.msg import MsgUtils
 from python.request.general.UEsController import UEsController
 from python.request.location.LocationUtils import LocationNotif
-from python.request.qos.QoSMsg import QosMsg
+from python.request.qos.QoSPerfMsg import QosPerfMsg
 from python.request.general.Core5GRequester import Core5GRequester
 from python.request.general.FlaskThread import FlaskThread
 import threading
@@ -49,7 +49,7 @@ class RequestManager:
         if content_type == MsgUtils.ContentType.TYPE_INIT_REQUEST:
             asked_qos = msg.qos_params['initialQoSRequest']
             # Simply create a dummy answer and send it back to the vApp
-            answer = QosMsg(MsgUtils.MsgType.ANSWER, content_type, MsgUtils.AnswerStatus.OK, asked_qos)
+            answer = QosPerfMsg(MsgUtils.MsgType.ANSWER, content_type, MsgUtils.AnswerStatus.OK, asked_qos)
             # Translate it into json with the unpickable flag as False to remove jsonpickle artifacts
             self.server.add_msg_to_send(jsonpickle.encode(answer, unpicklable=False, make_refs=False))
 
@@ -105,13 +105,17 @@ class RequestManager:
         self.ue_controller.update_ue_loc(ipv4=loc_info.ue_id, use_loc=True, loc_info=loc_info)
 
         # Send a notification to the vApp
-        self.notify_vapp(LocationNotif(MsgUtils.MsgType.NOTIF, MsgUtils.ContentType.TYPE_LOCATION_NOTIF,
-                                       MsgUtils.AnswerStatus.OK, loc_info))
+        self.notify_vapp(LocationNotif(MsgUtils.MsgType.INFO, MsgUtils.ContentType.TYPE_UE_LOCATION_NOTIF,
+                                       MsgUtils.AnswerStatus.MODIF, loc_info))
 
     def post_qos_received(self, qos_info):
         self.ue_controller.update_ue_qos(ipv4=qos_info.ue_id, use_qos=True, qos_info=qos_info)
-        self.notify_vapp(QosNotif(MsgUtils.MsgType.NOTIF, MsgUtils.ContentType.TYPE_LOCATION_NOTIF,
-                                  MsgUtils.AnswerStatus.OK, qos_info))
+        self.notify_vapp(QosNotif(MsgUtils.MsgType.INFO, MsgUtils.ContentType.TYPE_UE_QOS_NOTIF,
+                                  MsgUtils.AnswerStatus.MODIF, qos_info))
+
+    def on_global_qos_changed(self, qos_data):
+        self.notify_vapp(QosNotif(MsgUtils.MsgType.NOTIF, MsgUtils.ContentType.TYPE_GLOBAL_QOS_NOTIF,
+                                  MsgUtils.AnswerStatus.MODIF, qos_data))
 
     def notify_vapp(self, notif):
         self.server.add_msg_to_send(jsonpickle.encode(notif, unpicklable=False))

@@ -19,8 +19,9 @@ class MsgType(enum.Enum):
 class ContentType(enum.Enum):
     TYPE_INIT_REQUEST = 0
     TYPE_START_MONITORING = 1
-    TYPE_LOCATION_NOTIF = 2
-    TYPE_QOS_NOTIF = 3
+    TYPE_UE_LOCATION_NOTIF = 2
+    TYPE_UE_QOS_NOTIF = 3
+    TYPE_GLOBAL_QOS_NOTIF = 4
 
 
 class AnswerStatus(enum.Enum):

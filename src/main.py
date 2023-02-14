@@ -14,7 +14,7 @@ def welcome():
     if args.config == "default":
         add_local_env_var()
 
-    debug_env_vars()
+    # debug_env_vars()
 
 
 def debug_env_vars():
@@ -37,6 +37,9 @@ def add_local_env_var():
     os.environ['NETAPP_PORT_VAPP'] = "9877"
     os.environ['NEF_CALLBACK_URL'] = "http://host.docker.internal:"
 
+    os.environ['CALLBACK_URL'] = "http://host.docker.internal:"
+    os.environ['FRONTEND_CALLBACK_URL'] = "http://host.docker.internal:"
+
     # Env variables related to NEF
     # os.environ['NEF_HOST'] = "http://localhost:8888"
     os.environ['NEF_IP'] = "http://localhost"
@@ -56,8 +59,9 @@ def add_local_env_var():
 
 def read_command_line_args():
     parser = argparse.ArgumentParser(description='Immersion\'s NetApp')
+    # Todo: reput container as default config
     parser.add_argument("--config", help="Use either the default config (default, NetApp running on host)"
-                                         "or the containerized config (container)", default="container")
+                                         "or the containerized config (container)", default="default")
     parser.add_argument("--host", help="Specify host, default is 0.0.0.0", default="0.0.0.0")
     return parser.parse_args()
 
