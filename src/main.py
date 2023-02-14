@@ -61,7 +61,7 @@ def read_command_line_args():
     parser = argparse.ArgumentParser(description='Immersion\'s NetApp')
     # Todo: reput container as default config
     parser.add_argument("--config", help="Use either the default config (default, NetApp running on host)"
-                                         "or the containerized config (container)", default="default")
+                                         "or the containerized config (container)", default="container")
     parser.add_argument("--host", help="Specify host, default is 0.0.0.0", default="0.0.0.0")
     return parser.parse_args()
 
