@@ -20,7 +20,7 @@ class QosAdaptationContent(object):
 
 class AdaptationData(object):
 
-    def __init__(self, new_qos_id, adaptation_list):
-        self.new_qos_id = new_qos_id
-        self.list = adaptation_list
+    def __init__(self, new_qos_id, adaptation):
+        self.new_qos_status = new_qos_id
+        self.service_adaptation = adaptation
 

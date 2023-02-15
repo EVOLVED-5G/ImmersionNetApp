@@ -1,19 +1,28 @@
 from statemachine import StateMachine, State
+from python.request.qos.adaptations.ServiceAdaptor import ServiceAdaptor
 
 
 class QosFSM(StateMachine):
 
+    STATE_NOT_STARTED = "Not_started"
+    STATE_NORMAL = "Normal"
+    STATE_LOCAL_NG = "Local_QoS_not_guaranteed"
+    STATE_REMOTE_NG = "Remote_QoS_not_guaranteed"
+    STATE_DEGRADED = "Degraded"
+    STATE_ENDED = "Call_Ended"
+
     def __init__(self, req_manager):
         super().__init__()
         self.request_manager = req_manager
+        self.service_adaptor = ServiceAdaptor()
 
     # All possible states
-    not_started = State("Not_started", value=-1, initial=True)
-    normal = State("Normal", value=0)
-    local_not_guaranteed = State("Local_QoS_not_guaranteed", value=1)
-    remote_not_guaranteed = State("Remote_QoS_not_guaranteed", value=2)
-    degraded = State("Degraded", value=3)
-    call_ended = State("Call_Ended", value=4, final=True)
+    not_started = State(STATE_NOT_STARTED, value=-1, initial=True)
+    normal = State(STATE_NORMAL, value=0)
+    local_not_guaranteed = State(STATE_LOCAL_NG, value=1)
+    remote_not_guaranteed = State(STATE_REMOTE_NG, value=2)
+    degraded = State(STATE_DEGRADED, value=3)
+    call_ended = State(STATE_ENDED, value=4, final=True)
 
     # All valid transitions between states
     start_call = not_started.to(normal)
@@ -27,7 +36,27 @@ class QosFSM(StateMachine):
 
     def on_enter_state(self, event, state):
         print("Entering into state ", {state}, " after event ", {event})
+        adaptation = None
 
+        # Get the appropriate adaptations for the new QoS
+        match state.id:
+            case self.STATE_NOT_STARTED | self.STATE_NORMAL:
+                adaptation = self.service_adaptor.get_normal_qos_adaptations()
+
+            case self.STATE_LOCAL_NG:
+                adaptation = self.service_adaptor.get_local_user_degraded_adaptations()
+
+            case self.STATE_REMOTE_NG:
+                adaptation = self.service_adaptor.get_remote_user_degraded_adaptations()
+
+            case self.STATE_DEGRADED:
+                adaptation = self.service_adaptor.get_degraded_qos_adaptations()
+
+            case _:
+                print("Cannot get QoS adaptations for state ", {state.id})
+
+        # Ask the request manager to notify the vApp
+        self.request_manager.on_global_qos_changed(adaptation)
 
     # When receiving a qos update for a monitored UE, call me to trigger global Qos state change
     # and notify the vApp
