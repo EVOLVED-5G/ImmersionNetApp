@@ -11,7 +11,7 @@ def welcome():
 
     # Print the chosen config, then set env variables if we run the NetApp locally for dev/debug purposes
     print("Using the " + args.config + " config")
-    if args.config == "default":
+    if args.config == "local":
         add_local_env_var()
 
     # debug_env_vars()
@@ -60,7 +60,7 @@ def add_local_env_var():
 def read_command_line_args():
     parser = argparse.ArgumentParser(description='Immersion\'s NetApp')
     # Todo: reput container as default config
-    parser.add_argument("--config", help="Use either the default config (default, NetApp running on host)"
+    parser.add_argument("--config", help="Use either the local config (NetApp running on host)"
                                          "or the containerized config (container)", default="container")
     parser.add_argument("--host", help="Specify host, default is 0.0.0.0", default="0.0.0.0")
     return parser.parse_args()

@@ -37,6 +37,7 @@ class MainController(PoliteThread):
         self.request_manager.polite_stop_children()
 
     def start_session(self):
+        print("Starting session...")
         self.msgDispatcher.start()
         self.serverThread.start()
         self.request_manager.start_communications()

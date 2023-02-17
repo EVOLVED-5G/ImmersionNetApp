@@ -77,12 +77,12 @@ class WebRequestHandler:
         return jsonify(result=self.config_reader.get_config_text(config_name))
 
     def on_get_monitored_ues(self):
-        return jsonify(result=self.flask.get_monitored_ues())
+        return jsonify(result=self.flask.get_monitored_ues_str())
 
     # Same than before, but return the raw string instead of building json from it
     def on_get_raw_monitored_ues(self):
-        time.sleep(2.0)
-        return self.flask.get_monitored_ues()
+        time.sleep(3.0)
+        return self.flask.get_monitored_ues_str()
 
     def on_adding_test_ues(self):
         print("Adding test ues...")

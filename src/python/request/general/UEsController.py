@@ -47,7 +47,7 @@ class UEsController:
             current = self.monitored_ues[ipv4]
             self.monitored_ues[ipv4] = MonitoredUE(ipv4, current.use_loc, current.use_qos, status)
 
-    def get_monitored_ues(self):
+    def monitored_ues_to_string(self):
         result = ""
         if not self.monitored_ues:
             return "No monitored UE for now."

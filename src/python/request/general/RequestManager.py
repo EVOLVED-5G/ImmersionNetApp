@@ -9,6 +9,8 @@ from python.request.general.FlaskThread import FlaskThread
 import threading
 import time
 
+from python.request.qos.QosFSM import QosFSM
+from python.request.qos.QosFSMObserver import QosFSMObserver
 from python.request.qos.QosUtils import QosNotif
 # RequestManager
 # A class handling requests from the VApp and messages from/to the 5G Core.
@@ -17,7 +19,7 @@ from python.request.web.FlaskWebServer import FlaskWebServer
 from python.utils.WebUtils import ActionResult
 
 
-class RequestManager:
+class RequestManager(object):
 
     def __init__(self, server, controller_queue):
         self.server = server
@@ -25,6 +27,9 @@ class RequestManager:
         self.flask_thread = FlaskThread(self)
         self.core5GManager = Core5GRequester(self, self.flask_thread)
         self.ue_controller = UEsController(self)
+        self.qos_fsm = QosFSM()
+        self.fsm_observer = QosFSMObserver(self.qos_fsm, self)
+        self.qos_fsm.add_observer(self.fsm_observer)
 
         # Create and start immediately the web server to have access to the web GUI
         self.web_flask = FlaskWebServer(self)
@@ -36,6 +41,8 @@ class RequestManager:
         self.controller_queue.put(ControllerCMD.START_COMM)
 
     def start_communications(self):
+        # Consider that the call has started
+        self.qos_fsm.start_call()
         print("Starting comms with emulator...")
         self.flask_thread.start()
         # Mandatory call to get access token and create APIRequester instances
@@ -80,9 +87,10 @@ class RequestManager:
         res_type = ActionResult.SUCCESS
         if already_exist_1 and already_exist_2:
             res_type = ActionResult.WARNING
-
+        # UE were added, update the QoS fsm
+        self.qos_fsm.on_ue_qos_update(self.ue_controller.monitored_ues)
         # In the end, return the description of currently monitored UEs
-        res = {"res_type": res_type, "ues": self.ue_controller.get_monitored_ues()}
+        res = {"res_type": res_type, "ues": self.ue_controller.monitored_ues_to_string()}
         return res
 
     def add_or_update_ue_monitoring(self, ipv4, use_loc, use_qos):
@@ -96,8 +104,10 @@ class RequestManager:
                 self.core5GManager.track_ue_location(id_ue=ipv4.replace(".", ""))
             if use_qos:
                 self.core5GManager.start_gbr_monitoring(ue_ipv4=ipv4)
+        # At least one ue was added or updated, we must notify the QosFSM
+        self.qos_fsm.on_ue_qos_update(self.ue_controller.monitored_ues)
 
-        res = {"res_type": res_type, "ues": self.ue_controller.get_monitored_ues()}
+        res = {"res_type": res_type, "ues": self.ue_controller.monitored_ues_to_string()}
         return res
 
     def post_loc_received(self, loc_info):
@@ -110,6 +120,9 @@ class RequestManager:
 
     def post_qos_received(self, qos_info):
         self.ue_controller.update_ue_qos(ipv4=qos_info.ue_id, use_qos=True, qos_info=qos_info)
+        # At least one ue was added or updated, we must notify the QosFSM
+        self.qos_fsm.on_ue_qos_update(self.ue_controller.monitored_ues)
+        # Then, notify the vApp
         self.notify_vapp(QosNotif(MsgUtils.MsgType.INFO, MsgUtils.ContentType.TYPE_UE_QOS_NOTIF,
                                   MsgUtils.AnswerStatus.MODIF, qos_info))
 
@@ -120,8 +133,11 @@ class RequestManager:
     def notify_vapp(self, notif):
         self.server.add_msg_to_send(jsonpickle.encode(notif, unpicklable=False))
 
+    def get_monitored_ues_str(self):
+        return self.ue_controller.monitored_ues_to_string()
+
     def get_monitored_ues(self):
-        return self.ue_controller.get_monitored_ues()
+        return self.ue_controller.monitored_ues
 
     def delete_all_subscriptions(self):
         self.core5GManager.clean_subscriptions()
