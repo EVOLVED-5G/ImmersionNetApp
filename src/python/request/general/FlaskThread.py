@@ -8,7 +8,7 @@ from python.network.msg import MsgUtils
 from python.request.endpoint.EndPointGenerator import EndPointGenerator
 from python.request.endpoint.EndpointUtils import EndpointType
 from python.request.location.LocationUtils import LocationVal, LocationNotif
-from python.request.qos.QosUtils import QosVal, QosNotif
+from python.request.qos.UEQosUtils import UEQosVal, UEQosNotif
 
 
 def on_post_general_notif():
@@ -79,7 +79,7 @@ class FlaskThread(threading.Thread):
         print('QoS POST received: ' + jsonpickle.dumps(notif_json))
         # Extract data from the json msg
         report_info = notif_json['eventReports']
-        qos_val = QosVal(notif_json['ipv4Addr'], report_info[0]['event'])
+        qos_val = UEQosVal(notif_json['ipv4Addr'], report_info[0]['event'])
         self.request_handler.post_qos_received(qos_val)
         resp = jsonify(success=True)
         resp.status_code = 200

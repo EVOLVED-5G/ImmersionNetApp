@@ -11,7 +11,7 @@ import time
 
 from python.request.qos.QosFSM import QosFSM
 from python.request.qos.QosFSMObserver import QosFSMObserver
-from python.request.qos.QosUtils import QosNotif
+from python.request.qos.UEQosUtils import UEQosNotif
 # RequestManager
 # A class handling requests from the VApp and messages from/to the 5G Core.
 # It triggers the corresponding actions, like creating the corresponding 5G API calls
@@ -123,12 +123,12 @@ class RequestManager(object):
         # At least one ue was added or updated, we must notify the QosFSM
         self.qos_fsm.on_ue_qos_update(self.ue_controller.monitored_ues)
         # Then, notify the vApp
-        self.notify_vapp(QosNotif(MsgUtils.MsgType.INFO, MsgUtils.ContentType.TYPE_UE_QOS_NOTIF,
-                                  MsgUtils.AnswerStatus.MODIF, qos_info))
+        self.notify_vapp(UEQosNotif(MsgUtils.MsgType.INFO, MsgUtils.ContentType.TYPE_UE_QOS_NOTIF,
+                                    MsgUtils.AnswerStatus.MODIF, qos_info))
 
-    def on_global_qos_changed(self, qos_data):
-        self.notify_vapp(QosNotif(MsgUtils.MsgType.NOTIF, MsgUtils.ContentType.TYPE_GLOBAL_QOS_NOTIF,
-                                  MsgUtils.AnswerStatus.MODIF, qos_data))
+    def on_global_qos_changed(self, global_qos_data):
+        self.notify_vapp(UEQosNotif(MsgUtils.MsgType.NOTIF, MsgUtils.ContentType.TYPE_GLOBAL_QOS_NOTIF,
+                                    MsgUtils.AnswerStatus.MODIF, global_qos_data))
 
     def notify_vapp(self, notif):
         self.server.add_msg_to_send(jsonpickle.encode(notif, unpicklable=False))

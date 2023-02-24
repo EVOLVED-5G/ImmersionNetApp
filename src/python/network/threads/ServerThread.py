@@ -37,8 +37,8 @@ class ServerThread(PoliteThread):
             self.client_handle = HandleClientThread(client_socket, self.msg_dispatcher)
             self.client_handle.start()
             print("Client_" + str(self.numClient) + " accepted and handheld in a dedicated thread")
-            print(client_socket)
-            print(client_socket.getpeername())
+            # print(client_socket)
+            # print(client_socket.getpeername())
             self.numClient += 1
 
         # At the end, properly close my client handler

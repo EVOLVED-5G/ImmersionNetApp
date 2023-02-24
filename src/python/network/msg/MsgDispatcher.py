@@ -28,6 +28,7 @@ class MsgDispatcher(PoliteThread):
     def run(self):
         while self.must_run:
             raw_msg = self.queue_in.get(True)
+            # print("Raw msg: " + raw_msg)
             decoded_msg = jsonpickle.decode(raw_msg)
             # Find the first json key, which should be the first word between "" symbols
             pattern = "\"(.*?)\""

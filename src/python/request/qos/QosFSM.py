@@ -72,11 +72,10 @@ class QosFSM(StateMachine):
         nb_local_users = 0
         nb_remote_users = 0
 
-        print(monitored_ues, flush=True)
+        # print(monitored_ues, flush=True)
 
         # Count the number of ues with degraded QoS
         for ue in monitored_ues.values():
-            print(ue)
             if not ue.qos_guaranteed:
                 degraded_ue_nb += 1
                 if ue.is_local_user:
@@ -85,13 +84,16 @@ class QosFSM(StateMachine):
                     nb_remote_users += 1
 
         # No UE found? => Normal QoS
-        if degraded_ue_nb == 0 and "normal" not in self.current_state.id:
-            self.back_to_normal()
+        if degraded_ue_nb == 0:
+            # Safeguard: cannot enter into normal state if we were already in it
+            if "normal" not in self.current_state.id:
+                self.back_to_normal()
 
         # At least one local or remote UE has degraded oS
         elif degraded_ue_nb == 1:
-            if nb_local_users > 0 and "local" not in self.current_state.id:
-                self.local_qos_degradation()
+            if nb_local_users > 0:
+                if "local" not in self.current_state.id:
+                    self.local_qos_degradation()
             elif "remote" not in self.current_state.id:
                 self.remote_qos_degradation()
 

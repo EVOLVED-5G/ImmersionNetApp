@@ -42,9 +42,11 @@ class HandleClientThread(PoliteThread):
             chunks.append(chunk)
             total_read = total_read + len(chunk)
             msg = msg + chunk.decode('utf-8')
-        print("Received message: " + msg)
-        # Give the msg to the dispatcher
-        self.msg_dispatcher.add_msg(msg)
+
+        if len(msg) > 0:
+            print("Received message: " + msg)
+            # Give the msg to the dispatcher
+            self.msg_dispatcher.add_msg(msg)
 
     def add_msg_to_send(self, msg):
         self.queue_out.put(msg)

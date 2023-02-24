@@ -1,24 +1,24 @@
 from python.network.msg.MsgUtils import AnswerForVApp
 
 
-class QosNotif(AnswerForVApp):
+class UEQosNotif(AnswerForVApp):
 
     def __init__(self, type_msg, type_content, status, qos_data):
         super().__init__(type_msg, type_content, status)
-        self.content = QosContent(qos_data)
+        self.content = UEQosContent(qos_data)
         self.display_str = "QoS notif: " + self.content.to_display_string()
 
 
-class QosContent:
+class UEQosContent:
 
     def __init__(self, qos_val):
-        self.qos_data = qos_val
+        self.ue_qos_data = qos_val
 
     def to_display_string(self):
-        return self.qos_data.to_display_string()
+        return self.ue_qos_data.to_display_string()
 
 
-class QosVal:
+class UEQosVal:
 
     def __init__(self, ue_id, is_qos_guaranteed):
         self.ue_id = ue_id
