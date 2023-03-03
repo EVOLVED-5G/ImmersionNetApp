@@ -12,6 +12,7 @@ class LocationNotif(AnswerForVApp):
 class LocationContent:
 
     def __init__(self, loc_val):
+        self.content_type = 1
         self.loc_data = loc_val
 
     def to_display_string(self):

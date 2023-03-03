@@ -45,26 +45,6 @@ class QosFSM(StateMachine):
     def on_enter_state(self, event, state):
         print("Entering into state ", {state}, " after event ", {event})
 
-        # Get the appropriate adaptations for the new QoS
-        match state.id:
-            case "__initial__":
-                print("Entering initial QoS state")
-
-            case "not_started" | "normal":
-                self.adaptation = self.service_adaptor.get_normal_qos_adaptations()
-
-            case "local_not_guaranteed":
-                self.adaptation = self.service_adaptor.get_local_user_degraded_adaptations()
-
-            case "remote_not_guaranteed":
-                self.adaptation = self.service_adaptor.get_remote_user_degraded_adaptations()
-
-            case "degraded":
-                self.adaptation = self.service_adaptor.get_degraded_qos_adaptations()
-
-            case _:
-                print("Cannot get QoS adaptations for state ", {state.id})
-
     # When receiving a qos update for a monitored UE, call me to trigger global Qos state change
     # and notify the vApp
     def on_ue_qos_update(self, monitored_ues):

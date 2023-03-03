@@ -1,6 +1,7 @@
 from python.network.msg.MsgUtils import AnswerForVApp
 
 
+# Classes about QoS changes for 1 single UE
 class UEQosNotif(AnswerForVApp):
 
     def __init__(self, type_msg, type_content, status, qos_data):
@@ -9,16 +10,17 @@ class UEQosNotif(AnswerForVApp):
         self.display_str = "QoS notif: " + self.content.to_display_string()
 
 
-class UEQosContent:
+class UEQosContent(object):
 
     def __init__(self, qos_val):
+        self.content_type = 0
         self.ue_qos_data = qos_val
 
     def to_display_string(self):
         return self.ue_qos_data.to_display_string()
 
 
-class UEQosVal:
+class UEQosVal(object):
 
     def __init__(self, ue_id, is_qos_guaranteed):
         self.ue_id = ue_id

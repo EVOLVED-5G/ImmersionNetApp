@@ -3,6 +3,7 @@ from python.emulator.MonitoringUtils import MonitoringTriggerAnswer
 from python.network.msg import MsgUtils
 from python.request.general.UEsController import UEsController
 from python.request.location.LocationUtils import LocationNotif
+from python.request.qos.GlobalQosUtils import GlobalQosNotif, GlobalQosContent
 from python.request.qos.QoSPerfMsg import QosPerfMsg
 from python.request.general.Core5GRequester import Core5GRequester
 from python.request.general.FlaskThread import FlaskThread
@@ -127,11 +128,13 @@ class RequestManager(object):
                                     MsgUtils.AnswerStatus.MODIF, qos_info))
 
     def on_global_qos_changed(self, global_qos_data):
-        self.notify_vapp(UEQosNotif(MsgUtils.MsgType.NOTIF, MsgUtils.ContentType.TYPE_GLOBAL_QOS_NOTIF,
+        self.notify_vapp(GlobalQosNotif(MsgUtils.MsgType.NOTIF, MsgUtils.ContentType.TYPE_GLOBAL_QOS_NOTIF,
                                     MsgUtils.AnswerStatus.MODIF, global_qos_data))
 
     def notify_vapp(self, notif):
-        self.server.add_msg_to_send(jsonpickle.encode(notif, unpicklable=False))
+        json_content = jsonpickle.encode(notif, unpicklable=False)
+        print("Sending: " + json_content)
+        self.server.add_msg_to_send(json_content)
 
     def get_monitored_ues_str(self):
         return self.ue_controller.monitored_ues_to_string()

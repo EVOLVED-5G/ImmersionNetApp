@@ -20,6 +20,7 @@ class QosPerfMsg(AnswerForVApp):
 class JsonAnswerContent(object):
 
     def __init__(self, proposed_qos):
+        self.content_type = 0
         self.proposedQos = proposed_qos
 
     def to_string(self):
