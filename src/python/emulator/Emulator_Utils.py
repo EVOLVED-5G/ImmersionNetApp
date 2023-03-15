@@ -33,6 +33,7 @@ class MyConfig:
 def get_token_with_capif(nef_url, nef_user, nef_pass):
     configuration = Configuration()
     configuration.host = nef_url
+    configuration.verify_ssl = False
     api_client = ApiClient(configuration=configuration)
     api_client.select_header_content_type(["application/x-www-form-urlencoded"])
     api = LoginApi(api_client)
