@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %} IMM NetApp {% endblock %}
+
+{% block content %}
+<blockquote class="blockquote text-center" xmlns:https="http://www.w3.org/1999/xhtml">
+    <h1>Main dashboard</h1>
+
+    <br/><br/>
+
+    <div class="row">
+        <div class="col-md-8">
+            <a href=monitoringSession>
+                <button type="button" class="btn btn-primary w-75 h-100">Monitor the QoS of a remote assistance</button>
+            </a>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-2">
+
+            <div class="text-center">
+
+                <div class="row">
+                    <img src="{{url_for('static', filename='img/Icon_Questionmark.png')}}" class="rounded mx-auto d-block"
+                         alt="About logo" style="width:70px;height:40px;">
+                </div>
+                <br/>
+                <div class="row">
+                    <button type="button" class="btn btn-secondary w-100"
+                            data-bs-toggle="popover" data-bs-title="A EU project about 5G"
+                            data-bs-content="Please visit <a href='https://evolved-5g.eu/'> the official website</a>
+                            to learn more about the Evolved-5G project.">
+                        About Evolved-5G</button>
+                </div>
+                <br/>
+                <div class="row">
+                    <button type="button" class="btn btn-secondary w-100"
+                            data-bs-toggle="popover" data-bs-title="IMM Network App"
+                            data-bs-content="Made to help you monitor the 5G network QoS and suggest
+                            service adaptations.">
+                        About this Network App</button>
+                </div>
+                <br/>
+                <div class="row">
+                    <button type="button" class="btn btn-secondary w-100"
+                            data-bs-toggle="popover" data-bs-title="About us"
+                            data-bs-content="We are a French SME working on Mixed Reality and collaboration.
+                                            Please visit <a href='https://www.immersion.fr/en/'>our website</a>
+                                            to lean more!">
+                        Immersion</button>
+                </div>
+                <br/>
+            </div>
+        </div>
+       <div class="col-md-1"></div>
+    </div>
+
+
+    <!-- Loading the popover present in the page -->
+    <script>
+        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(
+            popoverTriggerEl, {"html":true, "sanitize":false}))
+    </script>
+
+</blockquote>
+{% endblock %}

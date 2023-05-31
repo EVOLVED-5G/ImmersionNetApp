@@ -11,7 +11,7 @@ def home_page():
 
 
 def dashboard_page():
-    return render_template('dashboard.html')
+    return render_template('dashboard2.html')
 
 
 def debug_page():
