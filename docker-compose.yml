@@ -14,22 +14,19 @@ services:
       FRONTEND_CALLBACK_ADDRESS: "${frontend_callback_address}"
       NETAPP_PORT_5G: "${netapp_port_5g}"
       NETAPP_PORT_WEB: "${netapp_port_web}"
-      # NEF variabless
+      # NEF variables
       NEF_ADDRESS: "${nef_address}"
       NEF_USER: "${nef_user}"
       NEF_PASSWORD: "${nef_password}"
-      # CAPIF variabes
+      # CAPIF variables
       CAPIF_HOSTNAME: "${capif_hostname}"
       CAPIF_PORT_HTTP: "${capif_port_http}"
       CAPIF_PORT_HTTPS: "${capif_port_https}"
       PATH_TO_CERTS: "${path_to_certs}"
+      # TSN variables
+      TSN_HOST: "${tsn_host}"
+      TSN_PORT: "${tsn_port}"
       
-      #NEF_IP: "${nef_ip}"
-      #NEF_PORT: "${nef_port}"
-      #NETAPP_SERVER_VAPP: "${netapp_server_vapp}"
-      #NETAPP_PORT_5G: "${netapp_port_5g}"
-      #NETAPP_PORT_WEB: "${netapp_port_web}"
-      #NETAPP_PORT_VAPP: "${netapp_port_vapp}"
 
     build:
     # Path to the src code
@@ -37,6 +34,7 @@ services:
     ports:
       # If port mapping is needed, left is host side and right is container side according to https://docs.docker.com/compose/compose-file/#ports
       # Be careful: if no mapping is specified, Docker will use a random available port on container side!
+      - "8899:8899"
       - "9876:9876"
       - "9877:9877"
       - "9988:9988"

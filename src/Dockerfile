@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y jq && apt-get clean
 
 ADD . /usr/src/app/
 
-EXPOSE 9876 9877 9988 9998 9999
+EXPOSE 8899 9876 9877 9988 9998 9999
 
 # Version without deployment, just a container
 #CMD [ "sh", "prepare.sh"]

@@ -28,6 +28,8 @@ class MyConfig:
         self.capif_host = str(os.getenv('CAPIF_HOSTNAME'))
         self.capif_https_port = int(os.getenv('CAPIF_PORT_HTTPS'))
         self.path_to_certs = str(os.getenv('PATH_TO_CERTS'))
+        self.tsn_host = str(os.getenv('TSN_HOST'))
+        self.tsn_port = str(os.getenv('TSN_PORT'))
 
 
 def get_token_with_capif(nef_url, nef_user, nef_pass):
