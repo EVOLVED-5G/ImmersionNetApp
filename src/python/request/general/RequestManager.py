@@ -92,7 +92,7 @@ class RequestManager(object):
         self.qos_fsm.on_ue_qos_update(self.ue_controller.monitored_ues)
 
         # Also ask for a TSN profile
-        self.core5GManager.select_tsn_profile()
+        # self.core5GManager.select_tsn_profile()
 
         # In the end, return the description of currently monitored UEs
         res = {"res_type": res_type, "ues": self.ue_controller.monitored_ues_to_string()}

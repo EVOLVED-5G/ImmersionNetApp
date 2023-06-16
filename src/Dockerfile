@@ -6,6 +6,7 @@ RUN mkdir -p capif_onboarding
 
 ADD requirements.txt /usr/src/app
 RUN pip3 install -r requirements.txt
+# RUN pip3 install git+https://github.com/EVOLVED-5G/SDK-CLI.git@develop
 
 RUN apt-get update && apt-get install -y jq && apt-get clean
 
