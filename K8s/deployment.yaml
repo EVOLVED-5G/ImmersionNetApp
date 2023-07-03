@@ -1,0 +1,128 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: imm_netapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: imm_netapp
+  template:
+    metadata:
+      labels:
+        app: imm_netapp
+    spec:
+      containers:
+        - name: imm_netapp
+          image: CharlesBailly/imm_netapp
+          imagePullPolicy: Always 
+          env:
+            - name: NETAPP_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: NETAPP_ID
+            - name: SERVER_FOR_VAPP
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: SERVER_FOR_VAPP
+             - name: CALLBACK_ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: CALLBACK_ADDRESS
+            - name: FRONTEND_CALLBACK_ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: FRONTEND_CALLBACK_ADDRESS
+            - name: NETAPP_PORT_5G
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: NETAPP_PORT_5G  
+            - name: NETAPP_PORT_WEB
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: NETAPP_PORT_WEB                  
+          
+          
+            - name: NEF_IP
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: NEF_IP
+            - name: NEF_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: NEF_PORT
+            - name: NEF_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: NEF_USER
+            - name: NEF_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: NEF_PASSWORD
+            - name: NEF_ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: NEF_ADDRESS
+            - name: NEF_CALLBACK_IP
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: NEF_CALLBACK_IP
+            - name: NEF_CALLBACK_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: NEF_CALLBACK_PORT
+                  
+                  
+            - name: PATH_TO_CERTS
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: PATH_TO_CERTS
+            - name: CAPIF_HOSTNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: CAPIF_HOSTNAME
+            - name: CAPIF_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: CAPIF_PORT
+            - name: CAPIF_PORT_HTTPS
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: CAPIF_PORT_HTTPS
+            - name: CAPIF_IP
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: CAPIF_IP
+
+
+            - name: TSN_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: TSN_HOST
+            - name: TSN_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: imm_configmap
+                  key: TSN_PORT
+
+
+---  
