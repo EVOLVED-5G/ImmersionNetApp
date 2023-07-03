@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: imm_netapp
+  name: imm_netapp_img
 spec:
   selector:
-    app: imm_netapp
+    app: imm_netapp_img
   ports:
     - protocol: TCP
       port: 9999
