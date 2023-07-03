@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: imm_netapp_img
+  name: imm_netapp
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: imm_netapp_img
+      app: imm_netapp
   template:
     metadata:
       labels:
-        app: imm_netapp_img
+        app: imm_netapp
     spec:
       containers:
-        - name: imm_netapp_img
-          image: CharlesBailly/imm_netapp_img
+        - name: imm_netapp
+          image: CharlesBailly/imm_netapp
           imagePullPolicy: Always 
           env:
             - name: NETAPP_ID
