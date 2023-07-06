@@ -61,8 +61,10 @@ class CustomEndpoint:
         # self.complete_url = str(os.getenv('CALLBACK_IP')) + ':' + str(flask_port) + self.url_rule
         if use_5g_port:
             self.complete_url = str(os.getenv('CALLBACK_ADDRESS')) + self.url_rule
+            # self.complete_url = "http://imm-netapp:9999" + self.url_rule
         else:
             self.complete_url = str(os.getenv('FRONTEND_CALLBACK_ADDRESS')) + self.url_rule
+            # self.complete_url = "http://imm-netapp:9988" + self.url_rule
 
         print("Endpoint addr:", self.complete_url)
 

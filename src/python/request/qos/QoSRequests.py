@@ -12,7 +12,8 @@ class QoSRequester(APIRequester):
 
     def __init__(self, flask_th, conf):
         super().__init__(flask_th, conf)
-        self.qos_awareness = QosAwareness(self.myconfig.nef_url,  # self.myconfig.token.access_token,
+        self.qos_awareness = QosAwareness(self.myconfig.nef_url,
+                                          # self.myconfig.token.access_token,
                                           self.myconfig.path_to_certs,
                                           self.myconfig.capif_host, self.myconfig.capif_https_port)
 

@@ -31,7 +31,7 @@ def add_local_env_var():
     os.environ['NETAPP_NAME'] = "IMM_Netapp"
     os.environ['NETAPP_ID'] = "imm_netapp"
     os.environ['NETAPP_IP'] = "http://0.0.0.0:"
-    os.environ['NETAPP_SERVER_VAPP'] = "127.0.0.1"
+    # os.environ['NETAPP_SERVER_VAPP'] = "127.0.0.1"
     os.environ['NETAPP_PORT_5G'] = "9999"
     os.environ['NETAPP_PORT_WEB'] = "9998"
     os.environ['NETAPP_PORT_VAPP'] = "9877"

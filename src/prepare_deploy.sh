@@ -6,4 +6,6 @@ jq -r .capif_callback_url=\"http://$CALLBACK_ADDRESS\" capif_registration.json >
 evolved5g register-and-onboard-to-capif --config_file_full_path="/usr/src/app/capif_registration.json" --environment="development"
 python main.py
 
+# Use production environment when deploying, development for local tests
 # evolved5g register-and-onboard-to-capif --config_file_full_path="/usr/src/app/capif_registration.json" --environment="production"
+# evolved5g register-and-onboard-to-capif --config_file_full_path="/usr/src/app/capif_registration.json" --environment="development"

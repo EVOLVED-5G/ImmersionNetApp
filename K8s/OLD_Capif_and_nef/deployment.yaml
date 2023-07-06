@@ -1,3 +1,4 @@
+# Capif and nef
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -14,7 +15,7 @@ spec:
     spec:
       containers:
         - name: imm-netapp
-          image: charlesbailly/imm_netapp:v4.1
+          image: charlesbailly/imm_netapp:v4
           imagePullPolicy: Always 
           env:
             - name: NETAPP_ID
@@ -123,14 +124,16 @@ spec:
                 configMapKeyRef:
                   name: imm-configmap
                   key: TSN_PORT
-          ports:
-          - containerPort: 9999
-          - containerPort: 9988
-          - containerPort: 9877
-      hostAliases:
-      - hostnames:
-        - immersion-nef.apps.ocp-epg.hi.inet
-        - immersion-capif.apps.ocp-epg.hi.inet
-        ip: 10.11.23.49
+                  
+            - name: NETWORK
+              valueFrom:
+                configMapKeyRef:
+                  name: imm-configmap
+                  key: NETWORK
+            - name: DDS_EXTERNAL_ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  name: imm-configmap
+                  key: DDS_EXTERNAL_ADDRESS
 
 ---

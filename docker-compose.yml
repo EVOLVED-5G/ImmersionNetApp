@@ -2,7 +2,7 @@ version: '3'
 services:
   imm_netapp:
     # Name of the built image and of the future container
-    image: imm_netapp_img
+    image: imm_netapp
     container_name: imm_netapp_container
     # List of environment variables
     environment:
@@ -46,9 +46,9 @@ services:
 
 # We need to create a network bridge with nef_emulator_default to be able to reach the NEF emulator 
 # This works
-networks:
-  default:
+# networks:
+  # default:
     # name: nef_emulator_services_default
-    name: services_default
-    external: true
+    # name: services_default
+    # external: true
 

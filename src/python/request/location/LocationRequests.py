@@ -11,7 +11,8 @@ class LocationRequester(APIRequester):
 
     def __init__(self, flask_th, conf):
         super().__init__(flask_th, conf)
-        self.location_subscriber = LocationSubscriber(self.myconfig.nef_url,  # self.myconfig.token.access_token,
+        self.location_subscriber = LocationSubscriber(self.myconfig.nef_url,
+                                                      # self.myconfig.token.access_token,
                                                       self.myconfig.path_to_certs,
                                                       self.myconfig.capif_host, self.myconfig.capif_https_port)
 
@@ -36,6 +37,10 @@ class LocationRequester(APIRequester):
         expire_time = (datetime.datetime.today() + datetime.timedelta(minutes=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
         netapp_id = self.myconfig.netapp_id
         external_id = str(id_ue) + "@domain.com"
+
+        print("NEF url: " + self.myconfig.nef_url)
+        print("Capif host: " + self.myconfig.capif_host)
+        print("Capif https: " + str(self.myconfig.capif_https_port))
 
         subscription = self.location_subscriber.create_subscription(
             netapp_id=netapp_id,

@@ -1,0 +1,40 @@
+# Capif and nef
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: imm-configmap
+data:
+  NETAPP_ID: imm-netapp
+  SERVER_FOR_VAPP: imm-netapp:9877 # 127.0.0.1:9877 ? To check
+  CALLBACK_ADDRESS: imm-netapp:9999
+  FRONTEND_CALLBACK_ADDRESS: imm-netapp:9988
+  NETAPP_PORT_5G: "9999"
+  NETAPP_PORT_WEB: "9988"
+
+  NEF_IP: nefemu
+  NEF_PORT: "443"
+  NEF_USER: admin@my-email.com
+  NEF_PASSWORD: pass
+  NEF_ADDRESS: localization-nef.apps.ocp-epg.hi.inet
+  NEF_CALLBACK_IP: imm-netapp
+  NEF_CALLBACK_PORT: "9999"
+  
+  PATH_TO_CERTS: /usr/src/app/capif_onboarding
+  CAPIF_HOSTNAME: localization-capif.apps.ocp-epg.hi.inet
+  CAPIF_USERNAME: user3
+  CAPIF_PORT: "8080"
+  CAPIF_PORT_HTTPS: "443"
+  CAPIF_PORT_HTTP: "80"
+  CAPIF_IP: capifcore
+  
+  TSN_HOST: localhost
+  TSN_PORT: "8899"
+  NETWORK: evolved5G_dds
+  DDS_EXTERNAL_ADDRESS: 10.11.23.53
+  
+  
+  
+  
+
+
+    

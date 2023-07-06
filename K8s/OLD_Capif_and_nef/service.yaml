@@ -1,0 +1,52 @@
+# Capif and nef
+apiVersion: v1
+kind: Service
+metadata:
+  name: imm-netapp
+spec:
+  selector:
+    app: imm-netapp
+  ports:
+    - port: 9999
+      protocol: TCP
+      targetPort: 9999
+      name: tcp-nef
+    - port: 9988
+      protocol: TCP
+      targetPort: 9988
+      name: tcp-web
+    - port: 9877
+      protocol: TCP
+      targetPort: 9877
+      name: tcp-vapp
+  type: LoadBalancer
+---
+# apiVersion: v1
+# kind: Service
+# metadata:
+  # name: imm-netapp-web
+# spec:
+  # selector:
+    # app: imm-netapp-web
+  # ports:
+      # name: tcp-nef
+    # - port: 9988
+      # protocol: TCP
+      # targetPort: 9988
+      # name: tcp-web
+  # type: LoadBalancer
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+  # name: server-for-vapp
+  # annotations: metallb.universe.tf/loadBalancerIPs: 192.168.1.100 # Comment if not needed, and adapt the static IP to UMA setup
+# spec:
+  # selector:
+    # app: server-for-vapp
+  # ports:
+    # - port: 9877 
+      # protocol: TCP
+      # targetPort: 9877
+      # name: tcp-vapp
+  # type: LoadBalancer

@@ -24,6 +24,7 @@ class MyConfig:
         self.nef_pass = str(os.getenv('NEF_PASSWORD'))
         # self.callback_url = "{}:{}".format(os.getenv('CALLBACK_IP'), os.getenv('NETAPP_PORT_5G'))
         self.callback_url = str(os.getenv('CALLBACK_ADDRESS'))
+        # self.callback_url = "http://immersion-nef.apps.ocp-epg.hi.inet"
         self.token = get_token_with_capif(self.nef_url, self.nef_user, self.nef_pass)
         self.capif_host = str(os.getenv('CAPIF_HOSTNAME'))
         self.capif_https_port = int(os.getenv('CAPIF_PORT_HTTPS'))

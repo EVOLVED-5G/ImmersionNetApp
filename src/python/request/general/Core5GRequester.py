@@ -37,13 +37,14 @@ class Core5GRequester:
 
     def select_tsn_profile(self):
         if self.tsnRequester is not None:
-            self.tsnRequester.display_profiles_and_adopt_last()
+            print("Commented")
+            # self.tsnRequester.display_profiles_and_adopt_last()
         else:
             print("Cannot select TSN profile: TsnRequester is null. Please check Capif registration.")
 
     def clean_subscriptions(self):
         self.locationRequester.delete_all_existing_subscriptions()
         self.qosRequester.delete_all_existing_subscriptions()
-        self.tsnRequester.clear_current_profile()
+        # self.tsnRequester.clear_current_profile()
         print("Cleaned all location, qos and tsn subscriptions/profiles")
 
