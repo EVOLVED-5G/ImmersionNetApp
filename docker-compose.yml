@@ -23,6 +23,7 @@ services:
       CAPIF_PORT_HTTP: "${capif_port_http}"
       CAPIF_PORT_HTTPS: "${capif_port_https}"
       PATH_TO_CERTS: "${path_to_certs}"
+      ENVIRONMENT_MODE: "${environment_mode}"
       # TSN variables
       TSN_HOST: "${tsn_host}"
       TSN_PORT: "${tsn_port}"
@@ -34,7 +35,7 @@ services:
     ports:
       # If port mapping is needed, left is host side and right is container side according to https://docs.docker.com/compose/compose-file/#ports
       # Be careful: if no mapping is specified, Docker will use a random available port on container side!
-      - "8899:8899"
+      #- "8899:8899"
       - "9876:9876"
       - "9877:9877"
       - "9988:9988"
@@ -45,10 +46,9 @@ services:
       - "capifcore:host-gateway" #Note: syntax without quotes not accepted
 
 # We need to create a network bridge with nef_emulator_default to be able to reach the NEF emulator 
-# This works
-# networks:
-  # default:
+# This works => when working locally, otherwise comment it!!!!!
+#networks:
+  #default:
     # name: nef_emulator_services_default
-    # name: services_default
-    # external: true
-
+    #name: services_default
+    #external: true

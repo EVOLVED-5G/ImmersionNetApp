@@ -18,14 +18,14 @@ class Core5GRequester:
         self.myconfig = MyConfig()
         self.locationRequester = LocationRequester(self.flask_thread, self.myconfig)
         self.qosRequester = QoSRequester(self.flask_thread, self.myconfig)
-        # self.tsnRequester = TsnRequester(self.flask_thread, self.myconfig)
+        self.tsnRequester = TsnRequester(self.flask_thread, self.myconfig)
         print("Loc Requester: ", self.locationRequester)
         print("QoS Requester: ", self.qosRequester)
-        # print("TSN Requester: ", self.tsnRequester)
+        print("TSN Requester: ", self.tsnRequester)
 
     def track_ue_location(self, id_ue):
         if self.locationRequester is not None:
-            self.locationRequester.monitor_subscription_capif(times=100, id_ue=id_ue)
+            self.locationRequester.monitor_subscription_capif(times=10, id_ue=id_ue)
         else:
             print("Cannot create loc subscription: LocationRequester is null. Please check Capif registration.")
 
@@ -36,15 +36,16 @@ class Core5GRequester:
             print("Cannot create qos subscription: QoSRequester is null. Please check Capif registration.")
 
     def select_tsn_profile(self):
+        # print('Commented for now')
         if self.tsnRequester is not None:
-            print("Commented")
-            # self.tsnRequester.display_profiles_and_adopt_last()
+            # print("Commented")
+            self.tsnRequester.display_profiles_and_adopt_last()
         else:
             print("Cannot select TSN profile: TsnRequester is null. Please check Capif registration.")
 
     def clean_subscriptions(self):
         self.locationRequester.delete_all_existing_subscriptions()
         self.qosRequester.delete_all_existing_subscriptions()
-        # self.tsnRequester.clear_current_profile()
+        self.tsnRequester.clear_current_profile()
         print("Cleaned all location, qos and tsn subscriptions/profiles")
 

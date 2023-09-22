@@ -44,7 +44,7 @@ class RequestManager(object):
     def start_communications(self):
         # Consider that the call has started
         self.qos_fsm.start_call()
-        print("Starting comms with emulator...")
+        print("Starting comms with 5Gcore...")
         self.flask_thread.start()
         # Mandatory call to get access token and create APIRequester instances
         self.core5GManager.start_comm_with_emulator()
@@ -68,6 +68,7 @@ class RequestManager(object):
             content = msg.monitoring_params['toggleMonitoring']
             # Start both UE location and QoS monitoring
             res = self.test_nef_emulator_calls()
+            print(res)
             # Inform the vApp that we accepted the monitoring request
             answer = MonitoringTriggerAnswer(MsgUtils.MsgType.ANSWER, content_type, MsgUtils.AnswerStatus.OK)
             self.server.add_msg_to_send(jsonpickle.encode(answer, unpicklable=False, make_refs=False))
@@ -75,6 +76,7 @@ class RequestManager(object):
     def test_nef_emulator_calls(self):
         # Optional calls to showcase the different APIs. Try to monitor two UEs.
         # Each time, check if the monitored UE already exists or not
+        print("Testing NEF calls...")
         already_exist_1 = self.ue_controller.add_monitored_ue("10.0.0.2", True, True)
         if not already_exist_1:
             self.core5GManager.track_ue_location(id_ue=10002)
@@ -92,7 +94,7 @@ class RequestManager(object):
         self.qos_fsm.on_ue_qos_update(self.ue_controller.monitored_ues)
 
         # Also ask for a TSN profile
-        # self.core5GManager.select_tsn_profile()
+        self.core5GManager.select_tsn_profile()
 
         # In the end, return the description of currently monitored UEs
         res = {"res_type": res_type, "ues": self.ue_controller.monitored_ues_to_string()}

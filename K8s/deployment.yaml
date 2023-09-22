@@ -127,10 +127,12 @@ spec:
           - containerPort: 9999
           - containerPort: 9988
           - containerPort: 9877
+          - containerPort: 8899
       hostAliases:
       - hostnames:
         - immersion-nef.apps.ocp-epg.hi.inet
         - immersion-capif.apps.ocp-epg.hi.inet
+        - immsersion-tsn.apps.ocp-epg.hi.inet
         ip: 10.11.23.49
 
 ---

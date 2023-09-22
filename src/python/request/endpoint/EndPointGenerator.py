@@ -43,15 +43,6 @@ class EndPointGenerator:
 
 class CustomEndpoint:
 
-    # def __init__(self, type_ep, url_rule, methods, func, flask_port):
-    #     self.type_ep = type_ep
-    #     self.url_rule = url_rule
-    #     self.methods = methods
-    #     self.func = func
-    #     # self.complete_url = str(os.getenv('CALLBACK_IP')) + ':' + str(flask_port) + self.url_rule
-    #     self.complete_url = str(os.getenv('CALLBACK_IP')) + ':' + str(flask_port) + self.url_rule
-    #     print("Endpoint addr:", self.complete_url)
-
     def __init__(self, type_ep, url_rule, methods, func, use_5g_port):
         self.type_ep = type_ep
         self.url_rule = url_rule
