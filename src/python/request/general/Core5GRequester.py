@@ -18,10 +18,10 @@ class Core5GRequester:
         self.myconfig = MyConfig()
         self.locationRequester = LocationRequester(self.flask_thread, self.myconfig)
         self.qosRequester = QoSRequester(self.flask_thread, self.myconfig)
-        self.tsnRequester = TsnRequester(self.flask_thread, self.myconfig)
+        # self.tsnRequester = TsnRequester(self.flask_thread, self.myconfig)
         print("Loc Requester: ", self.locationRequester)
         print("QoS Requester: ", self.qosRequester)
-        print("TSN Requester: ", self.tsnRequester)
+        # print("TSN Requester: ", self.tsnRequester)
 
     def track_ue_location(self, id_ue):
         if self.locationRequester is not None:
@@ -46,6 +46,6 @@ class Core5GRequester:
     def clean_subscriptions(self):
         self.locationRequester.delete_all_existing_subscriptions()
         self.qosRequester.delete_all_existing_subscriptions()
-        self.tsnRequester.clear_current_profile()
+        # self.tsnRequester.clear_current_profile()
         print("Cleaned all location, qos and tsn subscriptions/profiles")
 
