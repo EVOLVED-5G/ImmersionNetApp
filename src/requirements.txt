@@ -4,3 +4,4 @@ jsonpickle~=2.0.0
 Pillow~=9.0.0
 python-dotenv~=0.21.0
 python-statemachine~=1.0.3
+Werkzeug == 2.0.0
